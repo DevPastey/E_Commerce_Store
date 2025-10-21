@@ -62,33 +62,31 @@ export const signup = async(req, res) => {
 };
 
 export const login = async(req, res) => {
-    const {email, password} = req.body;
-    console.log(req.body);
+    try {
+        const {email, password} = req.body;
+        console.log(req.body);
 
-    //find user
-    const userExists = await User.findOne({email});
-    console.log(userExists);
+        //find user
+        const user = await User.findOne({email});
+        console.log(user);
 
-    //handles if no user found
-    if (!userExists) {
-        res.status(400).json({
-            message: "Invalid credentials.",
-        })
+        if (user && (await user.comparePassword(password))) {
+        //authenticate
+            const { accessToken, refreshToken } = generateTokens(user._id);
+            await storeRefreshToken(user._id, refreshToken);
+
+            setCookies(res, accessToken, refreshToken);
+
+            res.status(200).json({message: "Logged in succesfully"});
+            
+        }else{
+            res.status(400).json({message: "Invalid email or password"});
+        }
+
+
+    } catch (error) {
+        res.status(500).json({message: "Server Error", error: error.message})
     }
-
-    //compares password and hashed password
-    const isMatch = await userExists.comparePassword(password);
-
-    // handles password mismatch
-    if (!isMatch) {
-        res.status(400).json({
-            message: "Invalid credentials.",
-        })
-    }
-
-    
-
-
     
 };
 
