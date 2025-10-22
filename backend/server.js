@@ -16,7 +16,7 @@ app.use(express.json()); // allows you to parse the body of the request
 app.use(cookieParser()); //allows you access the cookies (req.cookies)
 
 app.use("/api/auth", authRoutes);
-app.use("/api/product", productRoutes);
+app.use("/api/products", productRoutes);
 
 
 connectDB().then(

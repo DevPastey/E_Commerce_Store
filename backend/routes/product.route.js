@@ -1,8 +1,9 @@
 import express from "express";
-import router from "./auth.route";
+import { getAllProducts } from "../controllers/product.controller.js";
+import { adminRoute, protectRoute } from "../middleware/auth.middleware.js";
 
-router = express.Router();
+const router = express.Router();
 
-router.get("/", getAllProducts)
+router.get("/", protectRoute, adminRoute, getAllProducts)
 
 export default  router;
