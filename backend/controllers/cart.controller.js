@@ -1,4 +1,4 @@
-import Product from "../models/product.model";
+import Product from "../models/product.model.js";
 
 export const getCartProducts = async (req, res) => {
     try {
@@ -11,7 +11,7 @@ export const getCartProducts = async (req, res) => {
         });
 
         res.json(cartItems);
-        
+
     } catch (error) {
         console.log("Error in getCartProducts controller", error.message);
         res.status(500).json({ message: "Server error", error: error.message });
@@ -29,7 +29,6 @@ export const addToCart = async (req, res) => {
             existingItem.quantity += 1;
         }else{
             user.cartItems.push(productId);
-            existingItem.quantity = 1;
         }
 
         await user.save();
