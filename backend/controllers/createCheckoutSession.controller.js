@@ -1,5 +1,8 @@
-import stripe from "../lib/stripe.js";
+import dotenv from "dotenv";
+import { stripe } from "../lib/stripe.js";
 import Coupon from "../models/coupon.model";
+
+dotenv.config();
 
 export const createCheckoutSession = async(req, res) => {
     try {
@@ -35,8 +38,55 @@ export const createCheckoutSession = async(req, res) => {
         };
 
 
-        const session = await stripe
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card", "paypal"],
+            line_items: lineItems,
+            mode: "payment",
+            success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={}CHECKOUT_SESSION_ID`,
+            cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
+            discounts: coupon
+            ?   [
+                    {
+                        coupon: await createStripeCoupon(coupon.discountPercentage),
+                    }
+                ] 
+            : [],metadata: {
+                userId: req.user._id.toString(),
+                couponCode: couponCode || "",
+            }
+
+        });
+
+
+        if (totalAmount >= 20000) {   //cents
+            await createNewCoupon(req.user._id)
+        }  
+
+        res.status(200).json({id: session.id, totalAmount: totalAmount / 100});
     } catch (error) {
         
     }
+};
+
+
+async function createStripeCoupon(discountPercentage) {
+    const coupon = await stripe.coupons.create({
+        percent_off: discountPercentage,
+        duration: "once"
+    });
+
+    return coupon.id;
+}
+
+async function createNewCoupon(userId) {
+    const newCoupon = new Coupon({
+        code: "GIFT" + Math.random().toString(36).substring(2, 8).toUpperCase(),
+        discountPercentage: 10,
+        expirationDate: new Date(Date.now() + 30 * 24 * 60 *60 *1000),
+        userId:userId,
+    })
+
+    await newCoupon.save();
+
+    return newCoupon;
 }
