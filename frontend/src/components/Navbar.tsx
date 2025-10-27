@@ -1,27 +1,54 @@
 import { Link } from "react-router-dom"
-import { LayoutDashboard, LogOut, ShoppingCart } from 'lucide-react';
+import { LogIn, Lock, UserPlus, LogOut, ShoppingCart } from 'lucide-react';
 
+const user = false;
+const isAdmin = false;
 const Navbar = () => {
   return (
-    <div className="absolute top-0 w-full bg-gray-900 flex items-center justify-between py-1 px-8 text-sm">
+    <div className="fixed top-0 w-full bg-gray-900 flex items-center justify-between py-1 px-8 text-sm  z-40 backdrop-blur-lg shadow-lg transition duration-300 border-b border-primary-green/20">
         
-       <div className="text-primary-green text-lg font-bold">E-commerce</div>
+       <Link to="/" className="text-primary-green text-lg font-bold">E-commerce</Link>
 
-       <div className="flex gap-6 py-2 justify-center text-gray-400  mr-8 ">
-            <Link to="/">Home</Link>
-            
-            <div className="flex items-center gap-1">
-                <ShoppingCart size={14}/> 
-                <span>Cart</span>
-            </div>
+       <nav className="flex gap-4 py-2 justify-center text-gray-400  mr-8 ">
+          <Link to="/" className="hover:text-emerald-400 transition duration-300 ease-in-out">Home</Link>
 
-            <div className="bg-green-700 flex px-2 py- gap-1 items-center rounded text-white">
-                <LayoutDashboard size={12} />
-                <span>Dashboard</span>
-            </div>
+          {user && (
+              <Link to={"/cart"} className="relative flex items-center gap-1 group hover:text-emerald-400 transition duration-300 ease-in-out">
+                <ShoppingCart size={14} className=""/> 
+                <span className="hidden sm:inline">Cart</span>
+                <span className="absolute -top-1 -left-2 bg-primary-green/50 text-white rounded-full px-[6px] py-px text-xs group-hover:bg-emerald-400 transition duration-300 ease-in-out">3</span>
+              </Link>
+          )}
+          
 
-            <div className="bg-gray-600/60 px-2 py-1 rounded text-white"><LogOut size={14} /></div>
-       </div>
+          {isAdmin && (
+            <Link to={"/dashboard"} className="bg-primary-green/50 hover:bg-primary-green/70 flex px-2 py- gap-1 items-center rounded text-white">
+              <Lock size={14} />
+              <span className="hidden sm:inline">Dashboard</span>
+            </Link>
+          )}
+          
+          {user 
+            ? (
+               <button className="flex items-center bg-gray-700 hover:bg-gray-600 transition duration-300 ease-in-out px-2 py-1 rounded text-white">
+                  <LogOut size={14} />
+                  <span className="hidden sm:inline ml-2">Log Out</span>
+              </button>) 
+            : (<>
+                  <Link to={"/signup"} className="flex items-center bg-primary-green/50 hover:bg-primary-green/70 px-2 py-1 rounded text-white">
+                    <UserPlus size={14} className="mr-2" /> 
+                    Sign Up 
+                  </Link>
+
+                  <Link to={"/login"} className="flex items-center bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-white">
+                    <LogIn size={14} className="mr-2" /> 
+                    Login 
+                  </Link>
+                </>
+            )
+          }
+          
+       </nav>
 
     </div>
   )
