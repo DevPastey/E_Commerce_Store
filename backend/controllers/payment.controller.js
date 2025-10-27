@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { stripe } from "../lib/stripe.js";
-import Coupon from "../models/coupon.model";
+import Coupon from "../models/coupon.model.js";
 
 dotenv.config();
 
@@ -53,6 +53,13 @@ export const createCheckoutSession = async(req, res) => {
             : [],metadata: {
                 userId: req.user._id.toString(),
                 couponCode: couponCode || "",
+                products: JSON.stringify(
+                    products.map((p) => ({
+                        id: p.id,
+                        quantity: p.quantity,
+                        price: p.price,
+                    }))
+                ),
             }
 
         });
@@ -64,7 +71,8 @@ export const createCheckoutSession = async(req, res) => {
 
         res.status(200).json({id: session.id, totalAmount: totalAmount / 100});
     } catch (error) {
-        
+       console.error("Error processing checkout:", error);
+        res.status(500).json({ message: "Error processing checkout", error:error.message}) 
     }
 };
 
@@ -76,7 +84,7 @@ async function createStripeCoupon(discountPercentage) {
     });
 
     return coupon.id;
-}
+};
 
 async function createNewCoupon(userId) {
     const newCoupon = new Coupon({
@@ -89,4 +97,4 @@ async function createNewCoupon(userId) {
     await newCoupon.save();
 
     return newCoupon;
-}
+};
