@@ -23,9 +23,10 @@ const HomePage = () => {
             </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-gray-900/60 flex flex-col px-4 py-6">
+        {/* <form onSubmit={handleSubmit} className="bg-gray-900/60 flex flex-col px-4 py-6 w-130">
             <h3>Create New Product</h3>
-        </form>
+            <Input name="name" value={} onChange={} />
+        </form> */}
     </div>
   )
 }
