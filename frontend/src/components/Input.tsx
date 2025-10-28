@@ -2,9 +2,9 @@ import type { InputProps } from "../types/types"
 
 
 
-const Input = ({name, placeholder, type, label, value, icon, onChange}: InputProps) => {
+const Input = ({name, placeholder, type, label, error, value, icon, onChange}: InputProps) => {
   return (
-    <div>
+    <div className="mt-6">
       	<label htmlFor={name} className='block text-sm font-medium text-gray-300'>
             {label}
         </label>
@@ -17,14 +17,15 @@ const Input = ({name, placeholder, type, label, value, icon, onChange}: InputPro
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}                
-                className='mt-1 mb-6 pl-8 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2
+                className='mt-1 pl-8 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2
                     px-3 text-white focus:outline-none focus:ring-2
                 focus:ring-emerald-500 focus:border-emerald-500  placeholder:mt-2 '
                 required
             />
             <div className="absolute top-[13px] left-2 z-10 text-gray-400" >{icon}</div>
         </div>
-        
+
+        {error && <p className="text-red-500/90 text-xs mt-1 ">{error}</p>}
     
     </div>
   )
