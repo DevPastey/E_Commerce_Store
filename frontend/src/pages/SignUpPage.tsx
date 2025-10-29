@@ -4,9 +4,8 @@ import { Link } from "react-router-dom";
 import { Lock, User, Mail, ArrowRight, Loader, UserPlus } from 'lucide-react';
 import {easeInOut, motion} from "framer-motion";
 import React, { useState } from "react";
-import type { FormShape } from "../types/types";
 import * as z from "zod";
-import {ZodError} from "zod";
+import { useUserStore } from "../stores/useUserStore";
 
  
 
@@ -25,9 +24,9 @@ const userSchema = z.object({
 type UserForm = z.infer<typeof userSchema>;
 
 
-type SafeParseReturnType<I, O> =
-  | { success: true; data: O }
-  | { success: false; error: ZodError<I> };
+// type SafeParseReturnType<I, O> =
+//   | { success: true; data: O }
+//   | { success: false; error: ZodError<I> };
 
 
 const SignUpPage = () => {
@@ -41,9 +40,11 @@ const SignUpPage = () => {
     });
 
     const [errors, setErrors] = useState<Partial<Record<keyof UserForm, string>>>({});
-   const [validationResult, setValidationResult] = useState<
+    const [validationResult, setValidationResult] = useState<
         ReturnType<typeof userSchema.safeParse> | null
     >(null);
+
+    const {signup, user} = useUserStore();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -67,7 +68,7 @@ const SignUpPage = () => {
                 confirmPassword: fieldErrors.confirmPassword?.[0],
             });
 
-            console.log(fieldErrors);
+
             return;
         }else{
             setErrors({});
@@ -87,7 +88,17 @@ const SignUpPage = () => {
             return;
         }
 
-        console.log("✅ Valid data:", validationResult.data);
+        signup(validationResult.data);
+        console.log("✅ Valid data sent:", validationResult.data);
+
+        setFormData({
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+        });
+
+        
     };
 
 
@@ -132,11 +143,11 @@ const SignUpPage = () => {
                     
                 </div>
 
-                <Link to="/login" className="flex gap-2 text-sm justify-center items-center">
-                    <span className="text-gray-400">Already have account?</span> 
-                    <span className="text-primary-green/80 hover:text-primary-green">Login here</span>
+                <div className="flex gap-2 text-sm justify-center items-center">
+                    <span className="text-gray-400">Already have an account?</span> 
+                    <Link to="/login" className="text-primary-green/80 hover:text-primary-green">Login here</Link>
                     <ArrowRight size={14} className="mt-1 text-primary-green/80 hover:text-primary-green" />
-                </Link>
+                </div>
             </motion.div>  
 
         </div>

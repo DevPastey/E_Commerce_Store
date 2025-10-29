@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route.js";
@@ -15,6 +16,13 @@ dotenv.config()
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+app.use(
+    cors({
+      origin: "http://localhost:5173", // your Vite dev server
+      credentials: true, // allow cookies if using withCredentials
+    })
+);
 
 
 app.use(express.json()); // allows you to parse the body of the request

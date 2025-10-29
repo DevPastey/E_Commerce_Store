@@ -20,7 +20,7 @@ const Input = ({name, placeholder, type, label, error, value, icon, onChange}: I
                 className='mt-1 pl-8 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2
                     px-3 text-white focus:outline-none focus:ring-2
                 focus:ring-emerald-500 focus:border-emerald-500  placeholder:mt-2 '
-                required
+                
             />
             <div className="absolute top-[13px] left-2 z-10 text-gray-400" >{icon}</div>
         </div>
