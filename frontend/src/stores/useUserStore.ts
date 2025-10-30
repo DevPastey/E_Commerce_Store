@@ -80,6 +80,16 @@ export const useUserStore = create<UserStore>((set, get) => ({
       return false;
     }
   },
+  
+  
+  logout: async () => {
+    try {
+      await axiosInstance.post("/auth/post");
+      set({user: null});
+    } catch (error: any) {
+      toast.error(error.response?.data?.message, {position: "bottom-center"})
+    }
+  },
 
   checkAuth: async () => {
     set({checkingAuth: true});
@@ -90,6 +100,8 @@ export const useUserStore = create<UserStore>((set, get) => ({
       set({checkingAuth: false, user: null});
     }
   },
+
+  
 
 
 }))
