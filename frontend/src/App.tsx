@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import "./index.css"
 import HomePage from "./pages/HomePage"
 import SignUpPage from "./pages/SignUpPage"
@@ -34,8 +34,8 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/login" element={ user ? <HomePage /> : <LoginPage />} />
+          <Route path="/signup" element={!user ? <SignUpPage /> : <Navigate to='/' />} />
+          <Route path="/login" element={ !user ? <LoginPage /> : <Navigate to='/' />} />
           {/* <Route path="" element={} />
           <Route path="" element={} />
           <Route path="" element={} />

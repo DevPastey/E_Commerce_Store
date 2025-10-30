@@ -24,3 +24,10 @@ export type LoginProps = {
     email: string;
     password: string;
 };
+
+export type categoryProp = {
+    name: string;
+    imageUrl: string;
+    href: string;
+    
+}
