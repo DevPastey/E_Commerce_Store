@@ -5,13 +5,13 @@ import type { FormShape, LoginProps } from "../types/types";
 import axios from "axios";
 
 interface UserStore {
-    user: any; // Replace `any` with your User type if you have one
-    loading: boolean;
-    checkingAuth: boolean;
-    errors: Record<string, string>;
-    signup: (data: FormShape) => Promise<boolean>;
-    login: (data: LoginProps) => Promise<boolean>;
-
+  user: any; // Replace `any` with your User type if you have one
+  loading: boolean;
+  checkingAuth: boolean;
+  errors: Record<string, string>;
+  signup: (data: FormShape) => Promise<boolean>;
+  login: (data: LoginProps) => Promise<boolean>;
+  checkAuth: () => Promise<void>;
 }
 
 
@@ -78,6 +78,16 @@ export const useUserStore = create<UserStore>((set, get) => ({
       }
       
       return false;
+    }
+  },
+
+  checkAuth: async () => {
+    set({checkingAuth: true});
+    try {
+      const res = await axiosInstance.get("/auth/profile");
+      set({user: res.data, checkingAuth: false});
+    } catch (error) {
+      set({checkingAuth: false, user: null});
     }
   },
 

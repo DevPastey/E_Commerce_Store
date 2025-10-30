@@ -6,12 +6,17 @@ import LoginPage from "./pages/LoginPage"
 import Navbar from "./components/Navbar"
 import { Toaster } from "react-hot-toast"
 import { useUserStore } from "./stores/useUserStore"
+import { useEffect } from "react"
 
 
 const App = () => {
 
+  const {user, checkAuth} = useUserStore()
 
-  const {user} = useUserStore();
+  useEffect (() => {
+    checkAuth();
+  }, [checkAuth]);
+
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
