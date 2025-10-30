@@ -18,10 +18,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(
-    cors({
-      origin: "http://localhost:5173", // your Vite dev server
-      credentials: true, // allow cookies if using withCredentials
-    })
+  cors({
+    origin: "http://localhost:5173", // your Vite dev server
+    credentials: true, // allow cookies if using withCredentials
+  })
 );
 
 

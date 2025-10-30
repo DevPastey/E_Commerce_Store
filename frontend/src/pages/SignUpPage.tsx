@@ -9,17 +9,30 @@ import { useUserStore } from "../stores/useUserStore";
 
  
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
 
-const userSchema = z.object({
-    name: z.string().min(2, "Name must be at least 2 characters long"),
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(8,"Password must be a minimum of 8 Characters long").regex(passwordRegex, "Password must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character"),
+const userSchema = z
+  .object({
+    name: z
+      .string()
+      .trim()
+      .min(2, "Name must be at least 2 characters long"),    
+    email: z
+      .email("Please enter a valid email address")
+      .transform((val) => val.trim()),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters long")
+      .regex(
+        passwordRegex,
+        "Password must include one uppercase letter, one lowercase letter, one number, and one special character"
+      ),
     confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
+  })
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
-    path: ["confirmPassword"], // This sets the error on the confirmPassword field
-}); 
+    path: ["confirmPassword"],
+  }); 
 
 type UserForm = z.infer<typeof userSchema>;
 
@@ -44,62 +57,64 @@ const SignUpPage = () => {
         ReturnType<typeof userSchema.safeParse> | null
     >(null);
 
-    const {signup, user} = useUserStore();
+    const {signup,} = useUserStore();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-
-        // Update local state immediately
+      
+        // Update local state
         const updatedData = { ...formData, [name]: value };
         setFormData(updatedData);
-        
-        // Validate with Zod
-        const result = userSchema.safeParse(updatedData);
-        setValidationResult(result);
-
-        // Handle validation errors
-        if (!result.success) {
-            const fieldErrors = z.flattenError(result.error).fieldErrors;
-
-            setErrors({
-                name: fieldErrors.name?.[0],
-                email: fieldErrors.email?.[0],
-                password: fieldErrors.password?.[0],
-                confirmPassword: fieldErrors.confirmPassword?.[0],
-            });
-
-
-            return;
-        }else{
-            setErrors({});
-        }
-    
+      
+        // Validate only the changed field
+        const fieldSchema = userSchema.shape[name as keyof typeof updatedData];
+        const fieldResult = fieldSchema.safeParse(value);
+      
+        setErrors((prev) => ({
+          ...prev,
+          [name]: fieldResult.success ? undefined : fieldResult.error.issues[0].message,
+        }));
+      
+        // Optionally keep full form validation for submit state tracking
+        setValidationResult(userSchema.safeParse(updatedData));
     };
+      
 
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        console.log("form data", formData);
-        // console.log("validation result", validationResult);
-
-        if (!validationResult?.success) {
-            console.warn("❌ Invalid form");
-            return;
+      
+        // Validate full form on submit
+        const result = userSchema.safeParse(formData);
+        setValidationResult(result);
+      
+        if (!result.success) {
+          const tree = z.treeifyError(result.error);
+          setErrors({
+            name: tree.properties?.name?.errors?.[0],
+            email: tree.properties?.email?.errors?.[0],
+            password: tree.properties?.password?.errors?.[0],
+            confirmPassword: tree.properties?.confirmPassword?.errors?.[0],
+          });
+          console.warn("❌ Invalid form submission");
+          return;
         }
-
-        signup(validationResult.data);
-        console.log("✅ Valid data sent:", validationResult.data);
-
-        setFormData({
+      
+        // Proceed with signup
+        const success = await signup(result.data);
+        console.log("✅ Valid data sent:", validationResult);
+      
+        if (success) {
+          setFormData({
             name: "",
             email: "",
             password: "",
             confirmPassword: "",
-        });
-
-        
+          });
+          setErrors({});
+        }
     };
+      
 
 
     return (

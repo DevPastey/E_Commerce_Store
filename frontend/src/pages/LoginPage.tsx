@@ -3,37 +3,89 @@ import Button from "../components/Button";
 import { Link } from "react-router-dom";
 import { Lock, User, Mail, ArrowRight, Loader, } from 'lucide-react';
 import {easeInOut, motion} from "framer-motion";
-import type { LoginProps } from "../types/types";
 import Input from "../components/Input";
+import { useUserStore } from "../stores/useUserStore";
+import * as z from "zod";
+import { passwordRegex } from "./SignUpPage";
+
+const loginSchema = z.object({
+  email: z
+  .email("Invalid email address")
+  .transform((val) => val.trim()),
+  password: z
+  .string()
+  .min(8,"Password must be a minimum of 8 Characters long")
+  .regex(passwordRegex, "Password must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character"),
+});
+
+type loginForm = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
-  const [user, setUser] = useState<LoginProps>
+  const [user, setUser] = useState<loginForm>
   ({
     email: "",
     password: "",
   });
 
+  const [errors, setErrors] = useState<Partial<Record<keyof loginForm, string>>>({});
+  const [validationResult, setValidationResult] = useState< ReturnType<typeof loginSchema.safeParse > | null>(null)
+
   const loading = false;
+
+  const {login} = useUserStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const  {name, value} = e.target;
 
-    setUser(prev => ({
+    // Update local state immediately
+    const updatedData = { ...user, [name]: value };
+    setUser(updatedData);
+
+    // Validate only the changed field
+    const fieldSchema = loginSchema.shape[name as keyof typeof updatedData];
+    const fieldResult = fieldSchema.safeParse(value);
+  
+    setErrors((prev) => ({
       ...prev,
-      [name]: value
-    }) );
-  }
+      [name]: fieldResult.success ? undefined : fieldResult.error.issues[0].message,
+    }));
+  
+    // Optionally keep full form validation for submit state tracking
+    setValidationResult(loginSchema.safeParse(updatedData));
+    
+
+  };
 
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     console.log("✅ user login:", user);
 
-    setUser({
-      email: "",
-      password: "",
-    });
+    // Validate full form on submit
+    const result = loginSchema.safeParse(user);
+    setValidationResult(result);// optional for debugging purpose
+      
+
+    if (!result.success) {
+      const tree = z.treeifyError(result.error);
+      setErrors({
+        email: tree.properties?.email?.errors?.[0],
+        password: tree.properties?.password?.errors?.[0],
+      });
+      console.warn("❌ Invalid form submission");
+      return;
+    }
+
+    const success = await login(result.data);
+    console.log("✅ Valid login credentials sent:", validationResult);
+
+    if (success) {
+      setUser({
+        email: "",
+        password: "",
+      });
+    }
 
   };
 
@@ -56,8 +108,8 @@ const LoginPage = () => {
       >
           <div className="w-120 bg-gray-900/70 py-2 px-4 shadow-md sm:rounded-lg sm:px-10 rounded my-6">
               <form onSubmit={handleSubmit} >
-                <Input type="text" label="Email address" name="email" value={user.email} placeholder="email@example.com" icon={<Mail size={18} aria-hidden="true" />} onChange={handleChange}/>
-                <Input type="password" label="Password" name="password" value={user.password} placeholder="*********" icon={<Lock size={18} aria-hidden="true" />} onChange={handleChange}/>
+                <Input type="text" label="Email address" name="email" value={user.email} placeholder="email@example.com" error={errors.email} icon={<Mail size={18} aria-hidden="true" />} onChange={handleChange}/>
+                <Input type="password" label="Password" name="password" value={user.password} placeholder="*********" error={errors.password} icon={<Lock size={18} aria-hidden="true" />} onChange={handleChange}/>
                 <Button disabled={loading} type="submit">
                     {loading ? (
                         <> 

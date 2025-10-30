@@ -32,11 +32,16 @@ const setCookies = (res, accessToken, refreshToken) => {
 }
 
 export const signup = async(req, res) => {
-    const {email, password, name} = req.body;
+    const {email, password, confirmPassword, name} = req.body;
     console.log(req.body);
     const userExists = await User.findOne({email})
     
     try {
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: "Passwords do not match" });
+        }
+        
         if (userExists) {
             return res.status(400).json({message: "User already exists"});
         }
@@ -57,6 +62,7 @@ export const signup = async(req, res) => {
         }, message: "User created successfully"})
 
     } catch (error) {
+        console.log("Signup error", error)
         res.status(500).json({message: error.message});
     }
 };
