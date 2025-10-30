@@ -44,7 +44,6 @@ type UserForm = z.infer<typeof userSchema>;
 
 const SignUpPage = () => {
 
-    const loading = false;
     const [formData, setFormData] = useState<UserForm>({
         name: "",
         email: "",
@@ -57,7 +56,7 @@ const SignUpPage = () => {
         ReturnType<typeof userSchema.safeParse> | null
     >(null);
 
-    const {signup,} = useUserStore();
+    const {signup, loading} = useUserStore();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

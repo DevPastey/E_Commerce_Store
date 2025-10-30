@@ -30,9 +30,8 @@ const LoginPage = () => {
   const [errors, setErrors] = useState<Partial<Record<keyof loginForm, string>>>({});
   const [validationResult, setValidationResult] = useState< ReturnType<typeof loginSchema.safeParse > | null>(null)
 
-  const loading = false;
 
-  const {login} = useUserStore();
+  const {login, loading} = useUserStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const  {name, value} = e.target;
