@@ -6,7 +6,7 @@ const Input = ({name, placeholder, type, label, error, value, icon, onChange}: I
   return (
     <div className="mt-6">
       	<label htmlFor={name} className='block text-sm font-medium text-gray-300'>
-            {label}
+          {label}
         </label>
 
         <div className="relative">
@@ -17,7 +17,7 @@ const Input = ({name, placeholder, type, label, error, value, icon, onChange}: I
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}                
-                className='mt-1 pl-8 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2
+                className='mt-1 pl-8 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-1
                     px-3 text-white focus:outline-none focus:ring-2
                 focus:ring-emerald-500 focus:border-emerald-500  placeholder:mt-2 '
                 

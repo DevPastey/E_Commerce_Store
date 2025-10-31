@@ -12,6 +12,7 @@ interface UserStore {
   signup: (data: FormShape) => Promise<boolean>;
   login: (data: LoginProps) => Promise<boolean>;
   checkAuth: () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 
@@ -84,7 +85,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
   
   logout: async () => {
     try {
-      await axiosInstance.post("/auth/post");
+      await axiosInstance.post("/auth/logout");
       set({user: null});
     } catch (error: any) {
       toast.error(error.response?.data?.message, {position: "bottom-center"})

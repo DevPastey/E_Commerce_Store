@@ -1,4 +1,5 @@
 import type React from "react";
+import { LucideIcon } from 'lucide-react';
 
 export type InputProps = {
   label?: string;
@@ -30,4 +31,23 @@ export type categoryProp = {
     imageUrl: string;
     href: string;
     
+}
+
+
+export type AdminTabProps = {
+    label: string;
+    icon: LucideIcon;
+    key: string;
+    isActive: boolean;
+    onClick: () => void;
+}
+
+
+export interface ProductShape {
+    name: string;
+    description: string;
+    price: number;
+    category: string;
+    count: number;
+    imageUrl: string;
 }
