@@ -8,9 +8,9 @@ router.get("/", protectRoute, adminRoute, getAllProducts);
 router.get("/featured",  getFeaturedProducts);
 router.get("/category/:category", getProductsByCategory,)
 router.get("/recommendations",  getRecommendedProducts);
-router.get("/", protectRoute, adminRoute, createProduct);
+router.post("/", protectRoute, adminRoute, createProduct);
 router.patch("/:id", protectRoute, adminRoute, toggleFeaturedProduct);
-router.get("/:id", protectRoute, adminRoute, deleteProduct);
+router.delete("/:id", protectRoute, adminRoute, deleteProduct);
 
 
 

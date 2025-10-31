@@ -2,9 +2,9 @@ import AdminInput from "../components/AdminInput";
 import { Loader, PlusCircle, Upload } from 'lucide-react';
 import Button from "../components/Button";
 import { useState } from "react";
-import { useUserStore } from "../stores/useUserStore";
 import { easeInOut, motion } from "framer-motion";
 import * as z from "zod";
+import { useProductStore } from "../stores/useProductStore";
 
 const categories = ["jean", "t-shirt", "shoe", "glasses", "jacket", "suit", "bag"];
 
@@ -15,7 +15,7 @@ export const newProductSchema = z.object({
       z.number().min(1, "Price must be a positive number"),
       z.string().min(1, "Price is required")
     ]),
-    count: z.union([
+    countInStock: z.union([
       z.number().min(1, "Count must be a positive number"),
       z.string().min(1, "Count is required")
     ]),
@@ -31,7 +31,7 @@ const CreateProductForm = () => {
         name: "",
         description: "",
         price: "",
-        count: "",
+        countInStock: "",
         imageUrl: "",
         category: "",
     });
@@ -39,7 +39,7 @@ const CreateProductForm = () => {
     const [errors, setErrors] = useState<Partial<Record<keyof newProductForm, string>>>({});
     const [validationResult, setValidationResult] = useState< ReturnType<typeof newProductSchema.safeParse > | null>(null)
     
-    const {loading} = useUserStore();
+    const {loading, createProduct} = useProductStore();
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -112,7 +112,7 @@ const CreateProductForm = () => {
             name: tree.properties?.name?.errors?.[0],
             description: tree.properties?.description?.errors?.[0],
             price: tree.properties?.price?.errors?.[0],
-            count: tree.properties?.count?.errors?.[0],
+            countInStock: tree.properties?.countInStock?.errors?.[0],
             imageUrl: tree.properties?.imageUrl?.errors?.[0],
             category: tree.properties?.category?.errors?.[0],
           });
@@ -121,22 +121,23 @@ const CreateProductForm = () => {
         }
       
         // Proceed with creating product
-        // const success = await createProduct(result.data);
+        const success = await createProduct(result.data);
+        // console.log(result)
         console.log("✅ Valid data sent:", validationResult);
       
         console.log(newProduct);
 
-        // if (success) {
-        //   setNewProduct({
-        //     name: "",
-        //     description: "",
-        //     price: "",
-        //     count: "",
-        //     imageUrl: "",
-        //     category: "",
-        //   });
-        //   setErrors({});
-        // };
+        if (success) {
+          setNewProduct({
+            name: "",
+            description: "",
+            price: "",
+            countInStock: "",
+            imageUrl: "",
+            category: "",
+          });
+          setErrors({});
+        };
 
         
     };
@@ -147,13 +148,14 @@ const CreateProductForm = () => {
         animate={{ opacity:1, y:0 }}
         transition={{ duration: 0.8, delay:0.2, ease:easeInOut}}
 
-        className="flex flex-col w-110 mt-4 py-4 px-6 bg-gray-900/80 text-sm"
+        className="flex flex-col w-110 mt-4 py-4 px-6 bg-gray-900/80 text-sm rounded-lg"
     >
         <form onSubmit={handleSubmit}
             autoComplete="on" // ✅ enables autofill
             method="POST"
+            className="pb-4"
         > 
-            <h3 className="text-emerald-200 "> Create New Product</h3>
+            <h3 className="text-emerald-200 text-lg"> Create New Product</h3>
 
             <div className="w-full">
             <AdminInput type="text" label="Product Name" name="name" value={newProduct.name} error={errors.name} onChange={handleChange} />
@@ -205,7 +207,7 @@ const CreateProductForm = () => {
 
             </div>
 
-            <AdminInput type="number" label="Count in stock" name="count" value={newProduct.count} error={errors.count} onChange={handleChange} />
+            <AdminInput type="number" label="Count in stock" name="countInStock" value={newProduct.countInStock} error={errors.countInStock} onChange={handleChange} />
 
             <div className='mt-4 flex items-center'>
                 <input type='file' name="imageUrl" id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />

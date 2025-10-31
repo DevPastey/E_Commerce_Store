@@ -8,7 +8,7 @@ const Input = ({name, placeholder, type, label, error, value, icon, onChange}: I
   const autoCompleteValue = getAutoCompleteValue(name, type);
 
   return (
-    <div className="mt-6">
+    <div className="mb-6">
       	<label htmlFor={name} className='block text-sm font-medium text-gray-300'>
           {label}
         </label>

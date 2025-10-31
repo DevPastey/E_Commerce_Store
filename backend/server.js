@@ -25,8 +25,9 @@ app.use(
 );
 
 
-app.use(express.json()); // allows you to parse the body of the request
+app.use(express.json({ limit: '10mb' })); // allows you to parse the body of the request
 app.use(cookieParser()); //allows you access the cookies (req.cookies)
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);

@@ -49,6 +49,6 @@ export interface ProductShape {
     description: string;
     price: number | string ;
     category: string;
-    count: number | string;
+    countInStock: number | string;
     imageUrl: string;
 }

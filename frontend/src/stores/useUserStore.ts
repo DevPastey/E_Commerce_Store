@@ -5,7 +5,7 @@ import type { FormShape, LoginProps } from "../types/types";
 import axios from "axios";
 
 interface UserStore {
-  user: any; // Replace `any` with your User type if you have one
+  user: FormShape | null; // Replace `any` with your User type if you have one
   loading: boolean;
   checkingAuth: boolean;
   errors: Record<string, string>;
@@ -17,7 +17,7 @@ interface UserStore {
 
 
 
-export const useUserStore = create<UserStore>((set, get) => ({
+export const useUserStore = create<UserStore>((set) => ({
   user: null,
   loading: false,
   checkingAuth: true,

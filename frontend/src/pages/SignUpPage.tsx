@@ -123,7 +123,7 @@ const SignUpPage = () => {
             animate={{ opacity:1, y:0 }}
             transition={{ duration: 0.8, ease:easeInOut}}
             >
-                <h2 className="text-primary-green text-2xl md:text-3xl font-bold mt-4">Create your account</h2>
+              <h2 className="text-primary-green text-2xl md:text-3xl font-bold mt-4">Create your account</h2>
 
             </motion.div>
             
@@ -132,7 +132,7 @@ const SignUpPage = () => {
             animate={{ opacity:1, y:0 }}
             transition={{ duration: 0.8, delay:0.2, ease:easeInOut}}
             >
-                <div className="w-120 bg-gray-900/70 py-2 px-4 shadow-md sm:rounded-lg sm:px-10 rounded my-6">
+                <div className="w-120 bg-gray-900/70 py-8 px-4 shadow-md sm:rounded-lg sm:px-10 rounded my-6">
                     <form onSubmit={handleSubmit} 
                       autoComplete="on" // ✅ enables autofill
                       method="POST"
