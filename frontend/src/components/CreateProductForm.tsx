@@ -148,7 +148,7 @@ const CreateProductForm = () => {
         animate={{ opacity:1, y:0 }}
         transition={{ duration: 0.8, delay:0.2, ease:easeInOut}}
 
-        className="flex flex-col w-110 mt-4 py-4 px-6 bg-gray-900/80 text-sm rounded-lg"
+        className="flex flex-col w-110 mt-6 py-4 px-6 bg-gray-900/80 text-sm rounded-lg"
     >
         <form onSubmit={handleSubmit}
             autoComplete="on" // ✅ enables autofill

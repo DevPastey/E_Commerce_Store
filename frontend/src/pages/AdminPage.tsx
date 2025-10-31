@@ -41,9 +41,9 @@ const AdminPage = () => {
       </motion.div>
       
 
-      <div>
+      <div className=" flex justify-center items-center w-[90%]">
         {isActiveTab === "create" && (<CreateProductForm />)}
-        {isActiveTab === "product" && (<ProductsTab />)}
+        {isActiveTab === "products" && (<ProductsTab />)}
         {isActiveTab === "analytics" && (<AnalyticsTab />)}
       </div>
     </div>
