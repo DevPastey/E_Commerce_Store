@@ -8,6 +8,7 @@ import { useUserStore } from "../stores/useUserStore";
 import * as z from "zod";
 import { passwordRegex } from "./SignUpPage";
 
+
 const loginSchema = z.object({
   email: z
   .email("Invalid email address")
@@ -36,6 +37,8 @@ const LoginPage = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const  {name, value} = e.target;
 
+
+
     // Update local state immediately
     const updatedData = { ...user, [name]: value };
     setUser(updatedData);
@@ -52,7 +55,6 @@ const LoginPage = () => {
     // Optionally keep full form validation for submit state tracking
     setValidationResult(loginSchema.safeParse(updatedData));
     
-
   };
 
 
@@ -106,7 +108,10 @@ const LoginPage = () => {
       transition={{ duration: 0.8, delay:0.2, ease:easeInOut}}
       >
           <div className="w-120 bg-gray-900/70 py-2 px-4 shadow-md sm:rounded-lg sm:px-10 rounded my-6">
-              <form onSubmit={handleSubmit} >
+              <form
+                autoComplete="on" // ✅ enables autofill
+                method="POST"
+               onSubmit={handleSubmit} >
                 <Input type="text" label="Email address" name="email" value={user.email} placeholder="email@example.com" error={errors.email} icon={<Mail size={18} aria-hidden="true" />} onChange={handleChange} />
                 <Input type="password" label="Password" name="password" value={user.password} placeholder="*********" error={errors.password} icon={<Lock size={18} aria-hidden="true" />} onChange={handleChange} />
                 <Button disabled={loading} type="submit">

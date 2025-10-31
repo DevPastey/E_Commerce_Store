@@ -149,7 +149,10 @@ const CreateProductForm = () => {
 
         className="flex flex-col w-110 mt-4 py-4 px-6 bg-gray-900/80 text-sm"
     >
-        <form onSubmit={handleSubmit}> 
+        <form onSubmit={handleSubmit}
+            autoComplete="on" // ✅ enables autofill
+            method="POST"
+        > 
             <h3 className="text-emerald-200 "> Create New Product</h3>
 
             <div className="w-full">

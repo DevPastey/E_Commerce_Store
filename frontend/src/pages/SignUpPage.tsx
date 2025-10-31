@@ -133,7 +133,10 @@ const SignUpPage = () => {
             transition={{ duration: 0.8, delay:0.2, ease:easeInOut}}
             >
                 <div className="w-120 bg-gray-900/70 py-2 px-4 shadow-md sm:rounded-lg sm:px-10 rounded my-6">
-                    <form onSubmit={handleSubmit} >
+                    <form onSubmit={handleSubmit} 
+                      autoComplete="on" // ✅ enables autofill
+                      method="POST"
+                    >
                         <Input type="text" label="Full name" name="name" value={formData.name} placeholder="John Doe" icon={<User size={18} aria-hidden={true} />} error={errors.name} onChange={handleChange}/>
                         <span>{}</span>
                         <Input type="text" label="Email address" name="email" value={formData.email} placeholder="email@example.com" icon={<Mail size={18} aria-hidden="true" />} error={errors.email} onChange={handleChange}/>
