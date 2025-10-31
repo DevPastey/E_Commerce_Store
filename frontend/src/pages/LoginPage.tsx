@@ -107,8 +107,8 @@ const LoginPage = () => {
       >
           <div className="w-120 bg-gray-900/70 py-2 px-4 shadow-md sm:rounded-lg sm:px-10 rounded my-6">
               <form onSubmit={handleSubmit} >
-                <Input type="text" label="Email address" name="email" value={user.email} placeholder="email@example.com" error={errors.email} icon={<Mail size={18} aria-hidden="true" />} onChange={handleChange}/>
-                <Input type="password" label="Password" name="password" value={user.password} placeholder="*********" error={errors.password} icon={<Lock size={18} aria-hidden="true" />} onChange={handleChange}/>
+                <Input type="text" label="Email address" name="email" value={user.email} placeholder="email@example.com" error={errors.email} icon={<Mail size={18} aria-hidden="true" />} onChange={handleChange} />
+                <Input type="password" label="Password" name="password" value={user.password} placeholder="*********" error={errors.password} icon={<Lock size={18} aria-hidden="true" />} onChange={handleChange} />
                 <Button disabled={loading} type="submit">
                     {loading ? (
                         <> 

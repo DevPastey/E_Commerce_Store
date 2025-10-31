@@ -2,6 +2,7 @@ import type React from "react";
 import { LucideIcon } from 'lucide-react';
 
 export type InputProps = {
+  step?: string;
   label?: string;
   icon?: React.ReactElement;
   error?: string
@@ -46,8 +47,8 @@ export type AdminTabProps = {
 export interface ProductShape {
     name: string;
     description: string;
-    price: number;
+    price: number | string ;
     category: string;
-    count: number;
+    count: number | string;
     imageUrl: string;
 }

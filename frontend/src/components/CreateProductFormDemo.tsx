@@ -66,22 +66,7 @@ const CreateProductForm = () => {
 					/>
 				</div>
 
-				<div>
-					<label htmlFor='description' className='block text-sm font-medium text-gray-300'>
-						Description
-					</label>
-					<textarea
-						id='description'
-						name='description'
-						value={newProduct.description}
-						onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-						rows='3'
-						className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm
-						 py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 
-						 focus:border-emerald-500'
-						required
-					/>
-				</div>
+				
 
 				<div>
 					<label htmlFor='price' className='block text-sm font-medium text-gray-300'>
