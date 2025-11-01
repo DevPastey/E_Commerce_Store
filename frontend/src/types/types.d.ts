@@ -20,6 +20,7 @@ export type FormShape = {
     email: string;
     password: string;
     confirmPassword: string;
+    role: string;
 };
 
 export type LoginProps = {
@@ -51,4 +52,6 @@ export interface ProductShape {
     category: string;
     countInStock: number | string;
     imageUrl: string;
+    _id: string ;
+    isFeatured?: boolean;
 }

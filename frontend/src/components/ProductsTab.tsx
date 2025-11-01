@@ -1,16 +1,13 @@
 import { motion } from "framer-motion";
 import { Trash, Star } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
-import { useEffect } from "react";
 
 const ProductsTab = () => {
   const { deleteProduct, toggleFeaturedProduct, products } = useProductStore();
 
 	console.log("products", products);
 
-  useEffect(() => {
-    fet
-  }, [])
+  
 
 	return (
 		<motion.div
@@ -61,10 +58,10 @@ const ProductsTab = () => {
 						<tr key={product._id} className='hover:bg-gray-700'>
 							<td className='px-6 py-4 whitespace-nowrap'>
 								<div className='flex items-center'>
-									<div className='flex-shrink-0 h-10 w-10'>
+									<div className='flex shrink-0 h-10 w-10'>
 										<img
 											className='h-10 w-10 rounded-full object-cover'
-											src={product.image}
+											src={product.imageUrl}
 											alt={product.name}
 										/>
 									</div>
@@ -74,7 +71,7 @@ const ProductsTab = () => {
 								</div>
 							</td>
 							<td className='px-6 py-4 whitespace-nowrap'>
-								<div className='text-sm text-gray-300'>${product.price.toFixed(2)}</div>
+								<div className='text-sm text-gray-300'>${Number(product.price).toFixed(2)}</div>
 							</td>
 							<td className='px-6 py-4 whitespace-nowrap'>
 								<div className='text-sm text-gray-300'>{product.category}</div>

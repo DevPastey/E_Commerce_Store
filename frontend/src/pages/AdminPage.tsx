@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminTabs from "../components/AdminTabs";
 import { adminTabs } from "../constants/adminTabs";
 import { easeInOut } from "framer-motion";
@@ -6,12 +6,18 @@ import {motion} from "framer-motion";
 import CreateProductForm from "../components/CreateProductForm";
 import ProductsTab from "../components/ProductsTab";
 import AnalyticsTab from "../components/AnalyticsTab";
+import { useProductStore } from "../stores/useProductStore";
 
 const isAdmin = true;
 
 const AdminPage = () => {
 
   const [isActiveTab, setIsActiveTab] = useState<string>("create");
+  const {fetchAllProducts} = useProductStore();
+
+  useEffect(() => {
+    fetchAllProducts();
+  }, [fetchAllProducts])
 
    
   return (
