@@ -9,6 +9,7 @@ type ProductStore = {
   loading: boolean,
   createProduct: (productData: ProductShape) => Promise<boolean>,
   fetchAllProducts: () => Promise<boolean>,
+  fetchProductsByCategory: (category: string | undefined) => Promise<boolean>,
   toggleFeaturedProduct: (productId: string) => Promise<boolean>,
   deleteProduct: (productId: string) => Promise<boolean>,
 
@@ -57,6 +58,20 @@ export const useProductStore = create<ProductStore>()((set) => ({
       toast.error(message, {position: "bottom-center"});
       set({ loading: false, errors: message });
       return false;
+    }
+  },
+
+  fetchProductsByCategory: async (category) => {
+    set({ loading: true});
+    try {
+      const res = await axiosInstance.get(`/products/category/${category}`);
+      set({products: res.data.products, loading: false});
+      return true;
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Failed to fetch Product";
+      toast.error(message, {position: "bottom-center"});
+      set({ loading: false, errors: message });
+      return false; 
     }
   },
 

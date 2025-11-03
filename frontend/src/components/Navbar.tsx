@@ -4,12 +4,12 @@ import { useUserStore } from "../stores/useUserStore";
 
 
 
-
 const Navbar = () => {
 
   const {user, logout} = useUserStore();
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = user?.role;
+
   return (
     <div className="fixed top-0 w-full bg-gray-900 flex items-center justify-between py-1 px-8 text-sm  z-40 backdrop-blur-lg shadow-lg transition duration-300 border-b border-primary-green/20">
         

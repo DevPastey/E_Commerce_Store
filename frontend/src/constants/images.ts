@@ -15,5 +15,5 @@ export const categories = [
     {href: "/jackets", name: "Jackets", imageURL: jackets},
     {href: "/shoes", name: "Shoes", imageURL: shoes},
     {href: "/suits", name: "Suits", imageURL: suits},
-    {href: "/tshirts", name: "Tshirts", imageURL: tshirts},
+    {href: "/t-shirt", name: "T-shirts", imageURL: tshirts},
 ];

@@ -5,8 +5,11 @@ import { useState } from "react";
 import { easeInOut, motion } from "framer-motion";
 import * as z from "zod";
 import { useProductStore } from "../stores/useProductStore";
+// import { productsDB } from "../constants/productsdb";
+// import type { ProductShape } from "../types/types";
+// import type { FormShape, ProductShape } from "../types/types";
 
-const categories = ["jean", "t-shirt", "shoe", "glasses", "jacket", "suit", "bag"];
+const categories = ["jeans", "t-shirt", "shoes", "glasses", "jackets", "suits", "bags"];
 
 export const newProductSchema = z.object({
     name: z.string().min(1, "Name is required"),
@@ -40,6 +43,20 @@ const CreateProductForm = () => {
     const [validationResult, setValidationResult] = useState< ReturnType<typeof newProductSchema.safeParse > | null>(null)
     
     const {loading, createProduct} = useProductStore();
+
+    // const handlePublicateDB  = async () => {
+    //     const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+    //     for (const p of productsDB) {
+    //       await createProduct(p);
+      
+    //       // Wait 5 secs before the next product
+    //       await delay(1000);
+    //     }
+      
+    //     console.log("All products published!");
+    
+    // };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -239,6 +256,10 @@ const CreateProductForm = () => {
             </Button>
             </div>
         </form>
+
+        {/* <button onClick={handlePublicateDB} className="hover:cursor-pointer w-full mt-8  flex justify-center items-center py-1 rounded bg-primary-green/60 hover:bg-primary-green/80">
+            Publicate DB
+        </button> */}
     </motion.div>
   )
 }

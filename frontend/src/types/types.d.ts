@@ -52,6 +52,6 @@ export interface ProductShape {
     category: string;
     countInStock: number | string;
     imageUrl: string;
-    _id: string ;
+    _id?: string ;
     isFeatured?: boolean;
 }
