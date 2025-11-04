@@ -53,5 +53,11 @@ export interface ProductShape {
     countInStock: number | string;
     imageUrl: string;
     _id?: string ;
+    quantity: number ;
     isFeatured?: boolean;
+}
+
+
+export interface CartShape {
+    prin
 }

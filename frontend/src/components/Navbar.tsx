@@ -1,12 +1,20 @@
 import { Link } from "react-router-dom"
 import { LogIn, Lock, UserPlus, LogOut, ShoppingCart } from 'lucide-react';
 import { useUserStore } from "../stores/useUserStore";
+import { useCartStore } from "../stores/useCartStore";
+import { useEffect } from "react";
 
 
 
 const Navbar = () => {
 
   const {user, logout} = useUserStore();
+  const {fetchCartItems} = useCartStore();
+
+  useEffect(() => {
+    fetchCartItems();
+  }, [fetchCartItems]);
+
 
   const isAdmin = user?.role;
 
@@ -22,7 +30,7 @@ const Navbar = () => {
             <Link to={"/cart"} className="relative flex items-center gap-1 group hover:text-emerald-400 transition duration-300 ease-in-out">
               <ShoppingCart size={14} className=""/> 
               <span className="hidden sm:inline">Cart</span>
-              <span className="absolute -top-1 -left-2 bg-primary-green/50 text-white rounded-full px-1.5 py-px text-xs group-hover:bg-emerald-400 transition duration-300 ease-in-out">3</span>
+              <span className="absolute -top-1 -left-2 bg-primary-green/50 text-white rounded-full px-1.5 py-px text-xs group-hover:bg-emerald-400 transition duration-300 ease-in-out">{}</span>
             </Link>
           )}
           
