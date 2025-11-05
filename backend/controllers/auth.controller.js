@@ -33,7 +33,6 @@ const setCookies = (res, accessToken, refreshToken) => {
 
 export const signup = async(req, res) => {
     const {email, password, confirmPassword, name} = req.body;
-    console.log(req.body);
     const userExists = await User.findOne({email})
     
     try {
@@ -70,11 +69,9 @@ export const signup = async(req, res) => {
 export const login = async(req, res) => {
     try {
         const {email, password} = req.body;
-        console.log(req.body);
 
         //find user
         const user = await User.findOne({email});
-        console.log(user);
 
         if (user && (await user.comparePassword(password))) {
         //authenticate

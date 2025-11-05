@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { LogIn, Lock, UserPlus, LogOut, ShoppingCart } from 'lucide-react';
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
-import { useEffect } from "react";
+
 
 
 

@@ -4,8 +4,12 @@ import { ShoppingCart } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
 // import type { ProductShape } from "../types/types";
 import { useCartStore } from "../stores/useCartStore";
+import type { ProductShape } from "../types/types";
 
-const ProductCard = ({ product }: any) => {
+type ProductProp = {
+	product: ProductShape,
+}
+const ProductCard = ({ product }: ProductProp) => {
 	const { user } = useUserStore();
 	const { addToCart } = useCartStore();
 	const handleAddToCart = () => {

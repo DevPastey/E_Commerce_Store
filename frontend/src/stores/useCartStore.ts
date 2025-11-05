@@ -13,6 +13,9 @@ type CartStore = {
   addToCart: (product: ProductShape) => Promise<void>;
   fetchCartItems: () => Promise<void>;
   clearCart: () => Promise<void>;
+  removeFromCart: (productId: string) => Promise<void>;
+  updateQuantity: (productId: string, quantity: number) => Promise<void>;
+
   calculateTotals: () => void;
 };
 
@@ -86,9 +89,27 @@ export const useCartStore = create<CartStore>()((set, get) => ({
     }
   },
 
-  // -------------------
-  // CALCULATE TOTALS
-  // -------------------
+
+  removeFromCart: async (productId) => {
+    await axiosInstance.delete(`/cart`, { data: { productId } });
+    set((prevState) => ({ cart: prevState.cart.filter((item) => item._id !== productId) }));
+    get().calculateTotals();
+},
+
+updateQuantity: async (productId, quantity) => {
+    if (quantity === 0) {
+        get().removeFromCart(productId);
+        return;
+    }
+
+    await axiosInstance.put(`/cart/${productId}`, { quantity });
+    set((prevState) => ({
+        cart: prevState.cart.map((item) => (item._id === productId ? { ...item, quantity } : item)),
+    }));
+    get().calculateTotals();
+},
+
+
   calculateTotals: () => {
     const { cart, coupon } = get();
     const subtotal = cart.reduce(
