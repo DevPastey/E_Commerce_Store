@@ -61,7 +61,6 @@ const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("✅ user login:", user);
 
     // Validate full form on submit
     const result = loginSchema.safeParse(user);
@@ -79,7 +78,6 @@ const LoginPage = () => {
     }
 
     const success = await login(result.data);
-    console.log("✅ Valid login credentials sent:", validationResult);
 
     if (success) {
       setUser({

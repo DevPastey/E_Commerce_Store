@@ -39,38 +39,48 @@ export const createCheckoutSession = async(req, res) => {
         };
 
 
+        // const session = await stripe.checkout.sessions.create({
+        //     payment_method_types: ["card"],
+        //     line_items: lineItems,
+        //     mode: "payment",
+        //     success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
+        //     cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
+        //     discounts: coupon
+        //     ?   [
+        //             {
+        //                 coupon: await createStripeCoupon(coupon.discountPercentage),
+        //             }
+        //         ] 
+        //     : [],metadata: {
+        //         userId: req.user._id.toString(),
+        //         couponCode: couponCode || "",
+        //         products: JSON.stringify(
+        //             products.map((p) => ({
+        //                 id: p.id,
+        //                 quantity: p.quantity,
+        //                 price: p.price,
+        //             }))
+        //         ),
+        //     }
+
+        // });
+
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: lineItems,
             mode: "payment",
-            success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
-            discounts: coupon
-            ?   [
-                    {
-                        coupon: await createStripeCoupon(coupon.discountPercentage),
-                    }
-                ] 
-            : [],metadata: {
-                userId: req.user._id.toString(),
-                couponCode: couponCode || "",
-                products: JSON.stringify(
-                    products.map((p) => ({
-                        id: p.id,
-                        quantity: p.quantity,
-                        price: p.price,
-                    }))
-                ),
-            }
-
+            success_url: `${process.env.CLIENT_URL}/success`,
+            cancel_url: `${process.env.CLIENT_URL}/cancel`,
         });
+          
+        res.status(200).json({ url: session.url });
 
 
         if (totalAmount >= 20000) {   //cents
             await createNewCoupon(req.user._id)
         }  
 
-        res.status(200).json({id: session.id, totalAmount: totalAmount / 100});
+        res.status(200).json({id: session.id,  url: session.url, totalAmount: totalAmount / 100});
     } catch (error) {
        console.error("Error processing checkout:", error);
         res.status(500).json({ message: "Error processing checkout", error:error.message}) 

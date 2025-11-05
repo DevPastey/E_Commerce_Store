@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { MoveRight } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "../lib/axios";
+import toast from "react-hot-toast";
 
 const stripePromise = loadStripe(
 	"pk_test_51SLsQvCeeOWZ94fupQhgxm9gcB9yMrrpT8xjlVKz9RQOXvREQNUlEWKPA5PtXspQ1YbTFfpdtG4dvuSZAuhCieQn00QBjpgNQq"
 );
+
 
 const OrderSummary = () => {
 	const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
@@ -18,23 +20,30 @@ const OrderSummary = () => {
 	const formattedSavings = savings.toFixed(2);
 
 	const handlePayment = async () => {
-		const stripe = await stripePromise;
-		const res = await axios.post("/payment/create-checkout-session", {
-			products: cart,
-			couponCode: coupon ? coupon.code : null,
-		});
+		// try {
+        //     const res = await axios.post("/payment/create-checkout-session", {
+        //       products: cart,
+        //       couponCode: coupon ? coupon.code : null,
+        //     });
+        
+        //     const session = res.data;
+        
+        //     if (session?.url) {
+        //       // ✅ Simply redirect to the checkout page
+        //       window.location.href = session.url;
+        //     } else {
+        //       throw new Error("No checkout URL returned from server");
+        //     }
+        // } catch (error:any) {
+        //     console.error("Checkout error:", error);
+        //     toast.error("Unable to start checkout session.", {position: 'bottom-center'});
+        // }
 
-		const session = res.data;
-
-        console.log("session is here:", session);
-		const result = await stripe.redirectToCheckout({
-			sessionId: session.id,
-		});
-
-		if (result.error) {
-			console.error("Error:", result.error);
-		}
-	};
+        const { data } = await axios.post("/payment/create-checkout-session", {
+            products: cart,
+        });
+        window.location.href = data.url;
+    };
 
 	return (
 		<motion.div
