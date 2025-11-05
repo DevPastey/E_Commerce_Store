@@ -25,6 +25,7 @@ export const useCartStore = create<CartStore>()((set, get) => ({
   total: 0,
   subtotal: 0,
   loading: false,
+  isCouponApplied: false,
   errors: {},
 
 
@@ -108,6 +109,9 @@ updateQuantity: async (productId, quantity) => {
     }));
     get().calculateTotals();
 },
+
+
+
 
 
   calculateTotals: () => {

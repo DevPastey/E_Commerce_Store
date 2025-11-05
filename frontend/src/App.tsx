@@ -11,6 +11,7 @@ import AdminPage from "./pages/AdminPage"
 import CategoryPage from "./pages/CategoryPage"
 import CartPage from "./pages/CartPage"
 import { useCartStore } from "./stores/useCartStore"
+import LoadingSpinner from "./components/LoadingSpinner"
 
 
 const App = () => {
@@ -31,7 +32,7 @@ const App = () => {
 	}, [fetchCartItems, user]);
 
 
-// if (checkingAuth) return <LoadingSpinner />
+if (checkingAuth) return <LoadingSpinner />
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
