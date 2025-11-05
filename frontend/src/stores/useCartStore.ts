@@ -1,83 +1,107 @@
 import axiosInstance from "../lib/axios";
 import { create } from "zustand";
 import { toast } from "react-hot-toast";
-import type { CartItem, CouponShape, ProductShape } from "../types/types";
+import type { CouponShape, ProductShape } from "../types/types";
 
 type CartStore = {
-    cart: ProductShape[],
-    coupon: CouponShape | null,
-    total: number,
-    subtotal: number,
-    loading: boolean,
-    errors: Record<string, string>,
-    addToCart: (product: any) => Promise<void>,
-    fetchCartItems: () => Promise<void>,
-    calculateTotals: () => void,
-
-    
-}
+  cart: ProductShape[];
+  coupon: CouponShape | null;
+  total: number;
+  subtotal: number;
+  loading: boolean;
+  errors: string | Record<string, string>;
+  addToCart: (product: ProductShape) => Promise<void>;
+  fetchCartItems: () => Promise<void>;
+  clearCart: () => Promise<void>;
+  calculateTotals: () => void;
+};
 
 export const useCartStore = create<CartStore>()((set, get) => ({
-    cart: [],
-    coupon: null,
-    total: 0,
-    subtotal: 0,
-    loading: false,
-    errors: {},
-
-    fetchCartItems: async () => {
-        set({loading: true});
-
-        try {
-            const res = await axiosInstance.get("/cart");
-            set({cart: res.data, loading: false});
-            get().calculateTotals();
-
-        } catch (error: any) {
-            const message = error.response?.data?.message || "Failed to fetch products in cart";
-            toast.error(message, {position: "bottom-center"});
-            set({ cart: [], loading: false, errors: message });
-        }
-    },
+  cart: [],
+  coupon: null,
+  total: 0,
+  subtotal: 0,
+  loading: false,
+  errors: {},
 
 
-    addToCart: async (product: any) => {
-        console.log(product)
-		try {
-			const res = await axiosInstance.post("/cart", { productId: product._id });
-            console.log(res)
-			toast.success("Product added to cart");
+  fetchCartItems: async () => {
+    set({ loading: true });
+    try {
+      const res = await axiosInstance.get("/cart");
+      // Expect backend to return array of products with quantity
+      set({ cart: res.data, loading: false });
+      get().calculateTotals();
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || "Failed to fetch products in cart";
+      toast.error(message, { position: "bottom-center" });
+      set({ cart: [], loading: false, errors: message });
+    }
+  },
 
-			set((prevState) => {
-				const existingItem = prevState.cart.find((item) => item._id === product._id);
-				const newCart = existingItem
-					? prevState.cart.map((item) =>
-							item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
-					  )
-					: [...prevState.cart, { ...product, quantity: 1 }];
-				return { cart: newCart };
-			});
-			get().calculateTotals();
-		} catch (error: any) {
-            const message = error.response?.data?.message || "Failed to add product to cart";
-            toast.error(message, {position: "bottom-center"});
-            set({ cart: [], loading: false, errors: message });
-		}
-	},
-    
-    
-    calculateTotals: () => {
-        const {cart, coupon} = get();
-        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        let total = subtotal;
 
-        if (coupon) {
-            const discount = subtotal * (coupon.discountPercentage / 100);
-            total = subtotal - discount;
-        };
+  addToCart: async (product) => {
+    try {
+      await axiosInstance.post("/cart", { productId: product._id });
+      toast.success("Product added to cart");
 
-        set({ subtotal, total });
+      // Option 1: re-fetch from backend (safest)
+      await get().fetchCartItems();
+
+      // Option 2 (faster, optimistic update):
+      // set((prev) => {
+      //   const existingItem = prev.cart.find((item) => item._id === product._id);
+      //   const newCart = existingItem
+      //     ? prev.cart.map((item) =>
+      //         item._id === product._id
+      //           ? { ...item, quantity: item.quantity + 1 }
+      //           : item
+      //       )
+      //     : [...prev.cart, { ...product, quantity: 1 }];
+      //   return { ...prev, cart: newCart };
+      // });
+
+      get().calculateTotals();
+
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || "Failed to add product to cart";
+      toast.error(message, { position: "bottom-center" });
+      set({ errors: message });
+    }
+  },
+
+  
+  clearCart: async () => {
+    try {
+      await axiosInstance.delete("/cart"); // adjust route if different
+      set({ cart: [], coupon: null, total: 0, subtotal: 0 });
+      toast.success("Cart cleared");
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || "Failed to clear cart";
+      toast.error(message, { position: "bottom-center" });
+      set({ errors: message });
+    }
+  },
+
+  // -------------------
+  // CALCULATE TOTALS
+  // -------------------
+  calculateTotals: () => {
+    const { cart, coupon } = get();
+    const subtotal = cart.reduce(
+      (sum, item) => sum + item.price * (item.quantity || 1),
+      0
+    );
+    let total = subtotal;
+
+    if (coupon) {
+      const discount = subtotal * (coupon.discountPercentage / 100);
+      total = subtotal - discount;
     }
 
-
-}))
+    set({ subtotal, total });
+  },
+}));
