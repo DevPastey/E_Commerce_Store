@@ -48,16 +48,27 @@ export type AdminTabProps = {
 export interface ProductShape {
     name: string;
     description: string;
-    price: number | string ;
+    price: number;
     category: string;
-    countInStock: number | string;
+    countInStock: number
     imageUrl: string;
-    _id?: string ;
+    _id?: ObjectId ;
     quantity: number ;
     isFeatured?: boolean;
 }
 
 
-export interface CartShape {
-    prin
+export interface CouponShape {
+    code: string; 
+    discountPercentage: number;
+    expirationDate: date;
+    isActive: boolean;
+    userId: FormShape;
 }
+
+export type CartItem = {
+    _id: ObjectId;
+    product: ObjectId;
+    quantity: number;
+    price: number;
+  };
