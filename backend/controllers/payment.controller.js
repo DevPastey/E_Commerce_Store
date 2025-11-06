@@ -7,6 +7,8 @@ dotenv.config();
 export const createCheckoutSession = async(req, res) => {
     try {
         const {products, couponCode} = req.body;
+
+        const {} = req.user
         if (!Array.isArray(products) || products.length === 0) {
             return res.status(400).json({error: "Invalid or empty products array"});
         };
@@ -39,31 +41,6 @@ export const createCheckoutSession = async(req, res) => {
         };
 
 
-        // const session = await stripe.checkout.sessions.create({
-        //     payment_method_types: ["card"],
-        //     line_items: lineItems,
-        //     mode: "payment",
-        //     success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
-        //     cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
-        //     discounts: coupon
-        //     ?   [
-        //             {
-        //                 coupon: await createStripeCoupon(coupon.discountPercentage),
-        //             }
-        //         ] 
-        //     : [],metadata: {
-        //         userId: req.user._id.toString(),
-        //         couponCode: couponCode || "",
-        //         products: JSON.stringify(
-        //             products.map((p) => ({
-        //                 id: p.id,
-        //                 quantity: p.quantity,
-        //                 price: p.price,
-        //             }))
-        //         ),
-        //     }
-
-        // });
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
@@ -82,7 +59,7 @@ export const createCheckoutSession = async(req, res) => {
                 couponCode: couponCode || "",
                 products: JSON.stringify(
                     products.map((p) => ({
-                        id: p.id,
+                        id: p._id,
                         quantity: p.quantity,
                         price: p.price,
                     })),

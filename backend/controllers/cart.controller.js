@@ -1,4 +1,5 @@
 import Product from "../models/product.model.js";
+import User from "../models/user.model.js";
 
 
 export const getCartProducts = async (req, res) => {
@@ -63,18 +64,30 @@ export const addToCart = async (req, res) => {
 
 export const removeAllFromCart = async (req, res) => {
   try {
-    const { productId } = req.body;
-    const user = req.user;
+    const { productId } = req.params;
+    const userId = req.user._id;
 
-    if (!productId) {
-      user.cartItems = [];
-    } else {
-      user.cartItems = user.cartItems.filter(
+    const user = await User.findById(userId);
+
+    let updatedCart;
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized user" });
+    };
+
+    if (productId) {
+      // Remove single product
+     updatedCart =  user.cartItems = user.cartItems.filter(
         (item) => String(item.product) !== String(productId)
       );
+    } else {
+      // Clear all
+      user.cartItems = [];
     }
 
-    await user.save();
+    // ✅ Update directly to avoid concurrency/version issues
+    await User.findByIdAndUpdate(userId, { $set: { cartItems: updatedCart } });
+
     res.json(user.cartItems);
   } catch (error) {
     console.error("Error in removeAllFromCart controller", error.message);

@@ -1,13 +1,14 @@
 import { ArrowRight, CheckCircle, HandHeart } from "lucide-react";
 import { easeInOut, motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCartStore } from "../stores/useCartStore";
 import axiosInstance from "../lib/axios";
 
 const PurchaseSuccessPage = () => {
     const [isProcessing, setIsProcessing] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const hasCleared = useRef(false);
 
     const {clearCart} = useCartStore();
 
