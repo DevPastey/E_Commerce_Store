@@ -29,7 +29,7 @@ const LoginPage = () => {
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof loginForm, string>>>({});
-  const [validationResult, setValidationResult] = useState< ReturnType<typeof loginSchema.safeParse > | null>(null)
+  // const [validationResult, setValidationResult] = useState< ReturnType<typeof loginSchema.safeParse > | null>(null)
 
 
   const {login, loading} = useUserStore();
@@ -53,7 +53,7 @@ const LoginPage = () => {
     }));
   
     // Optionally keep full form validation for submit state tracking
-    setValidationResult(loginSchema.safeParse(updatedData));
+    // setValidationResult(loginSchema.safeParse(updatedData));
     
   };
 
@@ -64,7 +64,7 @@ const LoginPage = () => {
 
     // Validate full form on submit
     const result = loginSchema.safeParse(user);
-    setValidationResult(result);// optional for debugging purpose
+    // setValidationResult(result);// optional for debugging purpose
       
 
     if (!result.success) {

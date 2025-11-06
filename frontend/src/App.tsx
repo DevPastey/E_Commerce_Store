@@ -12,6 +12,7 @@ import CategoryPage from "./pages/CategoryPage"
 import CartPage from "./pages/CartPage"
 import { useCartStore } from "./stores/useCartStore"
 import LoadingSpinner from "./components/LoadingSpinner"
+import PurchaseSuccessPage from "./pages/PurchaseSuccessPage"
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
 
   useEffect (() => {
     checkAuth();
+    console.log("User role: ", user?.role)
   }, [checkAuth]);
 
   useEffect(() => {
@@ -55,6 +57,8 @@ if (checkingAuth) return <LoadingSpinner />
           <Route path="/admin-dashboard" element={ user?.role === "admin" ? <AdminPage /> : <Navigate to='/login' />} />
           <Route path="/category/:category" element={ <CategoryPage /> }/>
           <Route path="/cart" element={ user ? <CartPage /> : <Navigate to="/login" /> }/>
+          <Route path="/purchase-success" element={ user ? <PurchaseSuccessPage /> : <Navigate to="/login" /> }/>
+
 
 
         </Routes>

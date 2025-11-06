@@ -3,7 +3,7 @@ import Order from "../models/order.model.js";
 
 export const checkoutSucess = async(req, res) => {
     try {
-        const {sessionId} =req.body;
+        const {sessionId} = req.body;
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         if (session.payment_status === "paid") {
             if (session.metadata.couponCode) {

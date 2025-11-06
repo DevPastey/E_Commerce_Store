@@ -22,7 +22,7 @@ export const createCheckoutSession = async(req, res) => {
                     currency: "usd",
                     product_data: {
                         name: product.name,
-                        images: [product.image],
+                        images: [product.imageUrl],
                     },
                     unit_amount: amount,
                 },
@@ -69,21 +69,48 @@ export const createCheckoutSession = async(req, res) => {
             payment_method_types: ["card"],
             line_items: lineItems,
             mode: "payment",
-            success_url: `${process.env.CLIENT_URL}/success`,
-            cancel_url: `${process.env.CLIENT_URL}/cancel`,
+            success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
+            discounts: coupon
+            ?   [
+                    {
+                        coupon: await createStripeCoupon(coupon.discountPercentage),
+                    }
+                ] 
+            : [], metadata: {
+                userId: req.user._id.toString(),
+                couponCode: couponCode || "",
+                products: JSON.stringify(
+                    products.map((p) => ({
+                        id: p.id,
+                        quantity: p.quantity,
+                        price: p.price,
+                    })),
+                ),
+            }
         });
-          
-        res.status(200).json({ url: session.url });
 
-
-        if (totalAmount >= 20000) {   //cents
-            await createNewCoupon(req.user._id)
-        }  
+        if (totalAmount >= 20000) {
+            try {
+              await createNewCoupon(req.user._id);
+            } catch (err) {
+              if (err.code === 11000) {
+                console.log("User already has a coupon; skipping creation.");
+              } else {
+                throw err;
+              }
+            }
+        }
 
         res.status(200).json({id: session.id,  url: session.url, totalAmount: totalAmount / 100});
+        return;
+
     } catch (error) {
-       console.error("Error processing checkout:", error);
-        res.status(500).json({ message: "Error processing checkout", error:error.message}) 
+        console.error("Error processing checkout:", error);
+        if (!res.headersSent) {
+          res.status(500).json({ message: "Error processing checkout", error: error.message });
+        };
+       
     }
 };
 

@@ -17,7 +17,7 @@ interface UserStore {
 
 
 
-export const useUserStore = create<UserStore>((set) => ({
+export const useUserStore = create<UserStore>((set, get) => ({
   user: null,
   loading: false,
   checkingAuth: true,
@@ -60,6 +60,7 @@ export const useUserStore = create<UserStore>((set) => ({
     try {
       const res = await axiosInstance.post("/auth/login", {email, password} );
       set({user: res.data, loading: false});
+      get().checkAuth();
     
       toast.success("Login successful", {position: "bottom-center"});
       return true;
