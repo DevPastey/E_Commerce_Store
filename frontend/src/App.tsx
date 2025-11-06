@@ -13,6 +13,7 @@ import CartPage from "./pages/CartPage"
 import { useCartStore } from "./stores/useCartStore"
 import LoadingSpinner from "./components/LoadingSpinner"
 import PurchaseSuccessPage from "./pages/PurchaseSuccessPage"
+import PurchaseCancelPage from "./pages/PurchaseCancelPage"
 
 
 const App = () => {
@@ -57,9 +58,7 @@ if (checkingAuth) return <LoadingSpinner />
           <Route path="/category/:category" element={ <CategoryPage /> }/>
           <Route path="/cart" element={ user ? <CartPage /> : <Navigate to="/login" /> }/>
           <Route path="/purchase-success" element={ user ? <PurchaseSuccessPage /> : <Navigate to="/login" /> }/>
-
-
-
+          <Route path="/purchase-cancel" element={ user ? <PurchaseCancelPage /> : <Navigate to="/login" /> }/>
         </Routes>
         
       </div>
