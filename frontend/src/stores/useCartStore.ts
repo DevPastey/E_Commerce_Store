@@ -52,20 +52,6 @@ export const useCartStore = create<CartStore>()((set, get) => ({
 
         // Option 1: re-fetch from backend (safest)
         await get().fetchCartItems();
-
-        // Option 2 (faster, optimistic update):
-        // set((prev) => {
-        //   const existingItem = prev.cart.find((item) => item._id === product._id);
-        //   const newCart = existingItem
-        //     ? prev.cart.map((item) =>
-        //         item._id === product._id
-        //           ? { ...item, quantity: item.quantity + 1 }
-        //           : item
-        //       )
-        //     : [...prev.cart, { ...product, quantity: 1 }];
-        //   return { ...prev, cart: newCart };
-        // });
-
         get().calculateTotals();
 
         } catch (error: any) {
@@ -81,7 +67,7 @@ export const useCartStore = create<CartStore>()((set, get) => ({
         try {
         await axiosInstance.delete("/cart"); // adjust route if different
         set({ cart: [], coupon: null, total: 0, subtotal: 0 });
-        toast.success("Cart cleared", { position: "top-right" });
+        toast.success("Cart cleared", { position: "bottom-center" });
         } catch (error: any) {
         const message =
             error.response?.data?.message || "Failed to clear cart";

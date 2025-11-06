@@ -19,18 +19,17 @@ const App = () => {
 
   const {user, checkAuth, checkingAuth} = useUserStore()
 
-  const {fetchCartItems, cart} = useCartStore();
+  const {fetchCartItems} = useCartStore();
 
   useEffect (() => {
     checkAuth();
-    console.log("User role: ", user?.role)
   }, [checkAuth]);
 
   useEffect(() => {
 		if (!user) return;
 
     fetchCartItems();
-    console.log("Cart Content:", cart)
+
 	}, [fetchCartItems, user]);
 
 

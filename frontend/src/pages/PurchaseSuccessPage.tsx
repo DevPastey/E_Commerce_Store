@@ -17,7 +17,10 @@ const PurchaseSuccessPage = () => {
         const handleCheckoutSession = async(sessionId: string) => {
             try {
                 axiosInstance.post("/payment/checkout-success", {sessionId});
-                clearCart();
+                if (!hasCleared.current) {
+                    clearCart();
+                    hasCleared.current = true;
+                  }
             } catch (error) {
                 console.log(error)
             } finally {

@@ -1,7 +1,5 @@
-import { use, useEffect } from "react";
 import CategoryItem from "../components/CategoryItem";
 import { categories } from "../constants/images";
-import { useUserStore } from "../stores/useUserStore";
 
 
 const HomePage = () => {
