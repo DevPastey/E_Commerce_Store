@@ -20,7 +20,9 @@ const OrderSummary = () => {
         try {
             const { data } = await axios.post("/payment/create-checkout-session", {
                 products: cart,
-                couponCode: coupon ? coupon.code : null,
+                couponCode: isCouponApplied ? coupon?.code : null, // ✅ only send if applied
+                applyCoupon: isCouponApplied,
+                // couponCode: coupon ? coupon.code : null,
             });
             window.location.href = data.url; 
         } catch (error) {

@@ -6,9 +6,9 @@ dotenv.config();
 
 export const createCheckoutSession = async(req, res) => {
     try {
-        const {products, couponCode} = req.body;
+        const {products, applyCoupon, couponCode} = req.body;
 
-        const {} = req.user
+        
         if (!Array.isArray(products) || products.length === 0) {
             return res.status(400).json({error: "Invalid or empty products array"});
         };
@@ -33,7 +33,7 @@ export const createCheckoutSession = async(req, res) => {
         });
 
         let coupon = null;
-        if (couponCode) {
+        if (applyCoupon && couponCode) {
             coupon = await Coupon.findOne({code: couponCode, userId:req.user, isActive: true});
             if (coupon) {
                 totalAmount = Math.round(totalAmount * coupon.discountPercentage / 100);
@@ -79,7 +79,7 @@ export const createCheckoutSession = async(req, res) => {
             }
         }
 
-        res.status(200).json({id: session.id,  url: session.url, totalAmount: totalAmount / 100});
+        res.status(200).json({id: session.id,  url: session.url, totalAmount: totalAmount / 100, couponApplied: !!coupon});
         return;
 
     } catch (error) {
@@ -90,6 +90,7 @@ export const createCheckoutSession = async(req, res) => {
        
     }
 };
+
 
 
 async function createStripeCoupon(discountPercentage) {

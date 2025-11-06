@@ -7,9 +7,9 @@ const GiftCouponCard = () => {
 	const [userInputCode, setUserInputCode] = useState("");
 	const { coupon, isCouponApplied, applyCoupon, getMyCoupon, removeCoupon } = useCartStore();
 
-	// useEffect(() => {
-	// 	getMyCoupon();
-	// }, [getMyCoupon]);
+	useEffect(() => {
+		getMyCoupon();
+	}, [getMyCoupon]);
 
 	useEffect(() => {
 		if (coupon) setUserInputCode(coupon.code);
@@ -21,7 +21,8 @@ const GiftCouponCard = () => {
 	};
 
 	const handleRemoveCoupon = async () => {
-		await removeCoupon();
+		removeCoupon();
+    
 		setUserInputCode("");
 	};
 

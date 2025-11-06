@@ -16,7 +16,7 @@ export const validateCoupon = async (req, res) => {
         const coupon = await Coupon.findOne({code: code, userId: req.user._id, isActive: true});
 
         if (!coupon) {
-            res.status(404).json({ message: "Coupon not found" });
+            res.status(404).json({valid: false, message: "Coupon not found" });
         }
 
         if(coupon.expirationDate < new Date()) {
@@ -26,7 +26,8 @@ export const validateCoupon = async (req, res) => {
         };
 
         res.json(
-            {   message: "Coupon is valid",
+            {   valid: true,
+                message: "Coupon is valid",
                 code: coupon.code,
                 discountPercentage: coupon.discountPercentage,
             }
