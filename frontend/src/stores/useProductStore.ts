@@ -35,7 +35,7 @@ export const useProductStore = create<ProductStore>()((set) => ({
       error: null,
     }));
       
-    toast.success("Product created successfully!", {position: "bottom-center"});
+    toast.success("Product created successfully!", {position: "top-right"});
     return true;
 
     } catch (error: any) {

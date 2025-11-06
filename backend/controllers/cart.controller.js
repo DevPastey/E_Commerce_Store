@@ -82,7 +82,7 @@ export const removeAllFromCart = async (req, res) => {
       );
     } else {
       // Clear all
-      user.cartItems = [];
+      updatedCart = [];
     }
 
     // ✅ Update directly to avoid concurrency/version issues

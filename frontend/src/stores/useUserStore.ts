@@ -32,7 +32,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
     try {
       const res = await axiosInstance.post("/auth/signup", {name, email, password, confirmPassword});
       set({user: res.data, loading: false});
-      toast.success("Sign up successful", {position: "bottom-center"});
+      toast.success("Sign up successful", {position: "top-right"});
       return true; // ✅ success
     } catch (error: any) {
       set({ loading: false});
@@ -62,7 +62,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
       set({user: res.data, loading: false});
       get().checkAuth();
     
-      toast.success("Login successful", {position: "bottom-center"});
+      toast.success("Login successful", {position: "top-right"});
       return true;
 
     } catch (error) {

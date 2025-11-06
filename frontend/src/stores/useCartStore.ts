@@ -48,7 +48,7 @@ export const useCartStore = create<CartStore>()((set, get) => ({
     addToCart: async (product) => {
         try {
         await axiosInstance.post("/cart", { productId: product._id });
-        toast.success("Product added to cart");
+        toast.success("Product added to cart", { position: "top-right" });
 
         // Option 1: re-fetch from backend (safest)
         await get().fetchCartItems();
@@ -67,7 +67,7 @@ export const useCartStore = create<CartStore>()((set, get) => ({
         try {
         await axiosInstance.delete("/cart"); // adjust route if different
         set({ cart: [], coupon: null, total: 0, subtotal: 0 });
-        toast.success("Cart cleared", { position: "bottom-center" });
+        toast.success("Cart cleared", { position: "top-right" });
         } catch (error: any) {
         const message =
             error.response?.data?.message || "Failed to clear cart";
