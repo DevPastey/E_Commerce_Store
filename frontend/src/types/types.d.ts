@@ -20,7 +20,7 @@ export type FormShape = {
     email: string;
     password: string;
     confirmPassword: string;
-    role?: string;
+    role: string;
 };
 
 export type LoginProps = {
@@ -73,7 +73,14 @@ export type CartItem = {
     product: ObjectId;
     quantity: number;
     price: number;
+  };
+
+
+  export type ItemProps = {
+    _id: ObjectId;
+    imageUrl: string;
+    quantity: number;
+    price: number;
     name: string;
     description: string;
-    imageUrl: string;
   };

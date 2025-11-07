@@ -1,11 +1,11 @@
 import axiosInstance from "../lib/axios";
 import { create } from "zustand";
 import { toast } from "react-hot-toast";
-import type { CouponShape, ProductShape } from "../types/types";
+import type { CouponShape, ItemProps, ProductShape } from "../types/types";
 
 
 type CartStore = {
-  cart: ProductShape[];
+  cart: ItemProps[];
   coupon: CouponShape | null;
   isCouponApplied: boolean;
   total: number;

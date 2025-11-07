@@ -1,9 +1,9 @@
 import {Minus, Plus, Trash} from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
-import type { CartItem } from "../types/types";
+import type { ItemProps } from "../types/types";
 
 type Item = {
-    item: CartItem;
+    item: ItemProps;
 }
 
 const CartItem = ({ item }: Item) => {
