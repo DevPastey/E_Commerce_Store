@@ -13,6 +13,8 @@ interface UserStore {
   login: (data: LoginProps) => Promise<boolean>;
   checkAuth: () => Promise<void>;
   logout: () => Promise<void>;
+  refreshToken: () => Promise<void>;
+
 }
 
 
@@ -103,10 +105,57 @@ export const useUserStore = create<UserStore>((set, get) => ({
     }
   },
 
-  
+  refreshToken: async () => {
+    // Prevent multiple simultaneous refresh attempts
+    if (get().checkingAuth) return;
 
+    set({checkingAuth: true});
+
+    try {
+      const res = await axiosInstance.post("auth/refresh-token");
+      set({ checkingAuth: false});
+      return res.data;
+    } catch (error) {
+      set({ user: null, checkingAuth: false});  
+      throw error;
+    }
+  },
 
 }));
 
 
-//TODO Implement the axios interceptors for refreshing access token
+//axios interceptors for refreshing access token
+
+let refreshPromise: any = null;
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if(error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // If a refresh is already in progress, wait for it to complete
+        if (refreshPromise) {
+          await refreshPromise;
+          return axiosInstance(originalRequest);
+        };
+
+        //Start a new refresh process
+        refreshPromise = useUserStore.getState().refreshToken();
+        await refreshPromise;
+        refreshPromise = null;
+
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        //If refresh fails, redirect to login or handle as needed
+        useUserStore.getState().logout();
+        return Promise.reject(refreshError);
+      }
+
+    }
+
+    return Promise.reject(error);
+  }
+);
