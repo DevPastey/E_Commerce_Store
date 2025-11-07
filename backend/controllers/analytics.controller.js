@@ -20,7 +20,7 @@ const getAnalyticsData = async() => {
     const {totalSales, totalRevenue} = salesData[0];
 
     return {
-        user: totalUsers,
+        users: totalUsers,
         products: totalProducts,
         totalSales,
         totalRevenue,
@@ -50,7 +50,7 @@ const getDailySalesData = async(startDate, endDate) => {
 
     const dateArray = getDatesInRange(startDate, endDate);
 
-    return dateArray.map(date => {
+    return dateArray?.map(date => {
         const foundData = dailySalesData.find(item => item._id === date);
 
         return {
@@ -70,7 +70,7 @@ export const analytics = async(req, res) => {
 
         const endDate = new Date();
         const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-        const dailySalesData = getDailySalesData(startDate, endDate);   
+        const dailySalesData = await getDailySalesData(startDate, endDate);   
 
         res.json({
             analyticsData,
@@ -90,5 +90,7 @@ function getDatesInRange (startDate, endDate) {
     while (currentDate <= endDate) {
         dates.push (currentDate.toISOString().split("T")[0] );
         currentDate.setDate(currentDate.getDate() + 1);
-    }
+    };
+
+    return dates;
 }
