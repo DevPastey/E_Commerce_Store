@@ -1,13 +1,22 @@
+import { useEffect } from "react";
 import CategoryItem from "../components/CategoryItem";
+import FeaturedProducts from "../components/FeaturedProducts";
 import { categories } from "../constants/images";
+import { useProductStore } from "../stores/useProductStore";
 
 
 const HomePage = () => {
+
+    const { fetchFeaturedProducts, products, loading } = useProductStore();
+
+    useEffect(() => {
+        fetchFeaturedProducts();    
+    }, [fetchFeaturedProducts]);
    
   return (
    <div className="relative min-h-screen text-white overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <h1 className="text-center text-4xl md:text-5xl font-bold text-primary-green mb-4">
+            <h1 className="text-center text-5xl md:text-6xl font-bold text-primary-green mb-4">
                 Explore Our Categories
             </h1>
             <p className="text-center text-sm lg:text-lg text-gray-300 mb-12">
@@ -24,13 +33,12 @@ const HomePage = () => {
                     />
                 ))}
             </div>
+
+            {!loading && products.length > 0 && ( <FeaturedProducts featuredProducts={products} />)}
+
+
         </div>
        
-    <div/>
-        {/* <form onSubmit={handleSubmit} className="bg-gray-900/60 flex flex-col px-4 py-6 w-130">
-            <h3>Create New Product</h3>
-            <Input name="name" value={} onChange={} />
-        </form> */}
     </div>
   )
 }

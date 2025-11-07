@@ -12,6 +12,8 @@ type ProductStore = {
   fetchProductsByCategory: (category: string | undefined) => Promise<boolean>,
   toggleFeaturedProduct: (productId: string) => Promise<boolean>,
   deleteProduct: (productId: string) => Promise<boolean>,
+  fetchFeaturedProducts: () => Promise<void>,
+
 
 
   errors: Record<string, string>,
@@ -116,4 +118,17 @@ export const useProductStore = create<ProductStore>()((set) => ({
     }
   },
 
-}))
+  fetchFeaturedProducts: async () => {
+    set({loading: true});
+
+    try {
+      const res = await axiosInstance.get("/products/featured");
+      set({ products: res.data, loading: false});
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Failed to fetch products";
+      set({ errors: message, loading: false });
+      console.log("Error fetching featured products", message);
+    }
+  },
+
+}));

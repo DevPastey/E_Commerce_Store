@@ -16,13 +16,14 @@ export const getFeaturedProducts = async (req, res) => {
     try {
         let featuredProducts = await redis.get("featured_products");
         if (featuredProducts) {
-            return res.json(JSON.parse({featuredProducts}));
+            return res.json(JSON.parse(JSON.stringify(featuredProducts)));
         }
 
 
         //if not in redis, fetch from MongoDB
         // .lean returns a plain javascript object instead of a MongoDB document which is good for performance
         featuredProducts = await Product.find({isFeatured: true}).lean();
+
         if (!featuredProducts) {
             return res.status(404).json({message: "No featured product found"});
         }
@@ -30,10 +31,14 @@ export const getFeaturedProducts = async (req, res) => {
         //store in redis for quick access
         await redis.set("featured_products", JSON.stringify(featuredProducts));
         res.json(featuredProducts);
+        console.log("works")
     } catch (error) {
         console.log("Error in getFeaturedProducts Controller", error.message);
         res.status(500).json({message: "Server Error", error: error.message});
+        console.log("bad");
     }
+
+  
 };
 
 export const createProduct = async (req, res) => {
@@ -156,7 +161,7 @@ async function updateFeaturedProductsCache () {
         const featuredProducts = await Product.find({isFeatured: true}).lean();
         await redis.set("featured_products", JSON.stringify(featuredProducts));
     } catch (error) {
-        console.log("Error in update catch funtion", error.message);
-        res.status(500).json({message: "Server error", error: error.message})
+        console.error("Error in updateFeaturedProductsCache:", error.message);
+        
     }
 }

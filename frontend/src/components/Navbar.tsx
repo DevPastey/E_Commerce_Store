@@ -21,7 +21,7 @@ const Navbar = () => {
         
        <Link to="/" className="text-primary-green text-lg font-bold">E-commerce</Link>
 
-       <nav className="flex gap-4 py-2 justify-center text-gray-400  mr-8 ">
+        <nav className="flex gap-4 py-2 items-center justify-center text-gray-400  mr-8 ">
           <Link to="/" className="hover:text-emerald-400 transition duration-300 ease-in-out">Home</Link>
 
           {user && (
@@ -35,7 +35,7 @@ const Navbar = () => {
           
 
           {isAdmin && (
-            <Link to={"/admin-dashboard"} className="bg-primary-green/80 hover:bg-primary-green/90 flex px-2 py- gap-1 items-center rounded text-white">
+            <Link to={"/admin-dashboard"} className="bg-primary-green/80 hover:bg-primary-green/90 flex px-2 py-1.5 gap-1 items-center rounded text-white">
               <Lock size={14} />
               <span className="hidden sm:inline">Dashboard</span>
             </Link>
@@ -43,7 +43,7 @@ const Navbar = () => {
           
           {user 
             ? (
-               <button className="flex cursor-pointer items-center bg-gray-700 hover:bg-gray-600 transition duration-300 ease-in-out px-2 py-1 rounded text-white"
+               <button className="flex cursor-pointer items-center bg-gray-700 hover:bg-gray-600 transition duration-300 ease-in-out px-2 py-1.5 rounded text-white"
                  onClick={logout}
                >
                   <LogOut size={14} />
