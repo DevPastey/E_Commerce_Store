@@ -20,7 +20,7 @@ export type FormShape = {
     email: string;
     password: string;
     confirmPassword: string;
-    role: string;
+    role?: string;
 };
 
 export type LoginProps = {
@@ -58,6 +58,8 @@ export interface ProductShape {
 }
 
 
+
+
 export interface CouponShape {
     code: string; 
     discountPercentage: number;
@@ -71,4 +73,7 @@ export type CartItem = {
     product: ObjectId;
     quantity: number;
     price: number;
+    name: string;
+    description: string;
+    imageUrl: string;
   };
