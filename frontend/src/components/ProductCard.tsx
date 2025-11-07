@@ -2,7 +2,6 @@
 import toast from "react-hot-toast";
 import { ShoppingCart } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
-// import type { ProductShape } from "../types/types";
 import { useCartStore } from "../stores/useCartStore";
 import type { ProductShape } from "../types/types";
 
