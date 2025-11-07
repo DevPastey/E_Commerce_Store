@@ -53,7 +53,7 @@ export interface ProductShape {
     countInStock: number
     imageUrl: string;
     _id?: ObjectId ;
-    quantity: number ;
+    quantity?: number ;
     isFeatured?: boolean;
 }
 

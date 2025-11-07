@@ -6,8 +6,6 @@ import { easeInOut, motion } from "framer-motion";
 import * as z from "zod";
 import { useProductStore } from "../stores/useProductStore";
 // import { productsDB } from "../constants/productsdb";
-// import type { ProductShape } from "../types/types";
-// import type { FormShape, ProductShape } from "../types/types";
 
 const categories = ["jeans", "t-shirt", "shoes", "glasses", "jackets", "suits", "bags"];
 
@@ -16,11 +14,9 @@ export const newProductSchema = z.object({
     description: z.string().min(2, "Description is required"),
     price: z.union([
       z.number().min(1, "Price must be a positive number"),
-      z.string().min(1, "Price is required")
     ]),
     countInStock: z.union([
       z.number().min(1, "Count must be a positive number"),
-      z.string().min(1, "Count is required")
     ]),
     imageUrl: z.string().min(1, "Image upload is required"),
     category: z.string().min(1, "Category is required"),
@@ -33,8 +29,8 @@ const CreateProductForm = () => {
     const [newProduct, setNewProduct] = useState<newProductForm>({
         name: "",
         description: "",
-        price: "",
-        countInStock: "",
+        price: 0,
+        countInStock: 0,
         imageUrl: "",
         category: "",
     });
@@ -148,8 +144,8 @@ const CreateProductForm = () => {
           setNewProduct({
             name: "",
             description: "",
-            price: "",
-            countInStock: "",
+            price: 0,
+            countInStock: 0,
             imageUrl: "",
             category: "",
           });
@@ -256,8 +252,8 @@ const CreateProductForm = () => {
             </Button>
             </div>
         </form>
-
-        {/* <button onClick={handlePublicateDB} className="hover:cursor-pointer w-full mt-8  flex justify-center items-center py-1 rounded bg-primary-green/60 hover:bg-primary-green/80">
+{/* 
+        <button onClick={handlePublicateDB} className="hover:cursor-pointer w-full mt-8  flex justify-center items-center py-1 rounded bg-primary-green/60 hover:bg-primary-green/80">
             Publicate DB
         </button> */}
     </motion.div>
