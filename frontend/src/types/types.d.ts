@@ -20,7 +20,7 @@ export type FormShape = {
     email: string;
     password: string;
     confirmPassword: string;
-    role: string;
+    role?: string;
 };
 
 export type LoginProps = {
