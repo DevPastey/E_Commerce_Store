@@ -112,7 +112,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
     set({checkingAuth: true});
 
     try {
-      const res = await axiosInstance.post("auth/refresh-token");
+      const res = await axiosInstance.post("auth/refresh-token", {}, {withCredentials: true});
       set({ checkingAuth: false});
       return res.data;
     } catch (error) {

@@ -149,4 +149,4 @@ export const getProfile = async (req, res) => {
     } catch (error) {
         res.status(500).json({message: "Server eror", error:error.message});
     }
-}
+};
