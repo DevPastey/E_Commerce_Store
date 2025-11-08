@@ -52,12 +52,12 @@ const Navbar = () => {
             : (<>
                   <Link to={"/signup"} className="flex items-center bg-primary-green/50 hover:bg-primary-green/70 px-2 py-1 rounded text-white">
                     <UserPlus size={14} className="mr-2" /> 
-                    Sign Up 
+                    <span className="max-sm:hidden">Sign Up </span>
                   </Link>
 
                   <Link to={"/login"} className="flex items-center bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-white">
                     <LogIn size={14} className="mr-2" /> 
-                    Login 
+                    <span className="max-sm:hidden">Login</span> 
                   </Link>
                 </>
             )
