@@ -132,7 +132,7 @@ const SignUpPage = () => {
             animate={{ opacity:1, y:0 }}
             transition={{ duration: 0.8, delay:0.2, ease:easeInOut}}
             >
-                <div className="w-120 bg-gray-900/70 py-8 px-4 shadow-md sm:rounded-lg sm:px-10 rounded my-6">
+                <div className="w-120 bg-gray-900/70 py-8 px-4 shadow-md sm:rounded-lg max-sm:w-80 sm:px-10 rounded my-6">
                     <form onSubmit={handleSubmit} 
                       autoComplete="on" // ✅ enables autofill
                       method="POST"
