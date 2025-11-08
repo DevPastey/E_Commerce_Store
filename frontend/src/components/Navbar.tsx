@@ -21,7 +21,7 @@ const Navbar = () => {
         
        <Link to="/" className="text-primary-green text-lg font-bold">E-commerce</Link>
 
-        <nav className="flex gap-4 py-2 items-center justify-center text-gray-400  mr-8 ">
+        <nav className="flex gap-4 py-2 items-center justify-center text-gray-400">
           <Link to="/" className="hover:text-emerald-400 transition duration-300 ease-in-out">Home</Link>
 
           {user && (
