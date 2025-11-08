@@ -27,7 +27,7 @@ const Input = ({name, placeholder, type, label, error, value, icon, onChange}: I
                 focus:ring-emerald-500 focus:border-emerald-500  placeholder:mt-2 '
                 
             />
-            <div className="absolute top-[13px] left-2 z-10 text-gray-400" >{icon}</div>
+            <div className="absolute top-2 left-2 z-10 text-gray-400" >{icon}</div>
         </div>
 
         {error && <p className="text-red-500/90 text-xs mt-1 ">{error}</p>}
