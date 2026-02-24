@@ -11,6 +11,5 @@ export const redis = new Redis({
 
 // redis.set("foo", "bar");
 const res = await redis.get("foo");
-console.log("Connecting to host:", process.env.REDIS_URL ? "Variable found" : "VARIABLE MISSING!");
 
 console.log(res)
