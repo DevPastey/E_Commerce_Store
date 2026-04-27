@@ -16,7 +16,11 @@ export const getFeaturedProducts = async (req, res) => {
     try {
         let featuredProducts = await redis.get("featured_products");
         if (featuredProducts) {
-            return res.json(JSON.parse(JSON.stringify(featuredProducts)));
+            if (typeof featuredProducts === "string") {
+                featuredProducts = JSON.parse(featuredProducts);
+            }
+
+            return res.json(featuredProducts);
         }
 
 
@@ -31,11 +35,9 @@ export const getFeaturedProducts = async (req, res) => {
         //store in redis for quick access
         await redis.set("featured_products", JSON.stringify(featuredProducts));
         res.json(featuredProducts);
-        console.log("works")
     } catch (error) {
         console.log("Error in getFeaturedProducts Controller", error.message);
         res.status(500).json({message: "Server Error", error: error.message});
-        console.log("bad");
     }
 
   
@@ -72,13 +74,13 @@ export const deleteProduct = async (req, res) => {
         const product = await Product.findById(req.params.id);
 
         if (!product) {
-            res.status(404).json({message: "Product not found",})
+            return res.status(404).json({message: "Product not found",})
         }
 
     
         // delete product image from cloudinary
-        if(product.image) {
-            const publicId = product.image.split("/").pop().split(".")[0];
+        if(product.imageUrl) {
+            const publicId = product.imageUrl.split("/").pop().split(".")[0];
             try {
                 await cloudinary.uploader.destroy(`products/${publicId}`);
                 console.log("Deleted image from cloudinary")
@@ -90,6 +92,7 @@ export const deleteProduct = async (req, res) => {
 
         // delete product from mongoDB
         await Product.findByIdAndDelete(req.params.id);
+        await updateFeaturedProductsCache();
 
         res.json({message: "Product deleted successfully"});
 
@@ -124,11 +127,19 @@ export const getRecommendedProducts = async (req, res) => {
 };
 
 export const getProductsByCategory = async (req, res) => {
-    const {category} = req.params;
+    const category = decodeURIComponent(req.params.category || "").trim();
+
+    if (!category) {
+        return res.status(400).json({ message: "Category is required" });
+    }
 
     try {
-        const products = await Product.find({category});
-        res.json({products})
+        const products = await Product.find({ category })
+            .collation({ locale: "en", strength: 2 })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        res.json({ products });
     } catch (error) {
         console.log("Error in getProductsByCategory Controller", error.message);
         res.status(500).json({message: "Server error", error: error.message})

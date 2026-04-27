@@ -8,7 +8,7 @@ import { useProductStore } from "../stores/useProductStore";
 // import { productsDB } from "../constants/productsdb";
 import updatedProducts from "../constants/updatedProducts"
 
-const categories = ["jeans", "t-shirt", "shoes", "glasses", "jackets", "suits", "bags"];
+const categories = ["apparel", "sports", "appliances", "kitchen", "bathroom", "shoes", "home", "cleaning", "jewelry", "accessories"];
 
 export const newProductSchema = z.object({
     name: z.string().min(1, "Name is required"),

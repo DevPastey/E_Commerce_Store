@@ -9,11 +9,18 @@ import tshirts from "../assets//tshirts.jpg";
 
 
 export const categories = [
-    {href: "/jeans", name: "Jeans", imageURL: jeans},
+    {href: "/apparel", name: "Apparel", imageURL: jeans},
     {href: "/bags", name: "Bags", imageURL: bags},
     {href: "/glasses", name: "Glasses", imageURL: glasses},
     {href: "/jackets", name: "Jackets", imageURL: jackets},
     {href: "/shoes", name: "Shoes", imageURL: shoes},
-    {href: "/suits", name: "Suits", imageURL: suits},
-    {href: "/t-shirt", name: "T-shirts", imageURL: tshirts},
+    {href: "/sports", name: "Sports", imageURL: suits},
+    {href: "/accessories", name: "Accessories", imageURL: tshirts},
+    {href: "/appliances", name: "Appliances", imageURL: tshirts},
+    {href: "/bathroom", name: "Bathroom", imageURL: tshirts},
+    {href: "/cleaning", name: "Cleaning", imageURL: tshirts},
+    {href: "/home", name: "Home", imageURL: tshirts},
+    {href: "/kitchen", name: "Kitchen", imageURL: tshirts},
+    {href: "/jewelry", name: "Jewelry", imageURL: tshirts},
+
 ];
